@@ -1,10 +1,9 @@
-package gs
+package gm
 
 import (
 	"math"
 
 	"github.com/mocheer/xena/alg"
-	"github.com/mocheer/xena/gm"
 )
 
 type LonLat [2]float64
@@ -17,8 +16,12 @@ func (m LonLat) Lat() float64 {
 	return m[1]
 }
 
+func (m LonLat) Point() Point {
+	return Point(m)
+}
+
 // GetTileAndOffset 获取经纬度对应的瓦片信息，这里是基于3857投影
-func (m LonLat) GetTileAndOffset(z float64) (*Tile, *gm.Point) {
+func (m LonLat) GetTileAndOffset(z float64) (*Tile, *Point) {
 	lon := m.Lon()
 	lat := m.Lat()
 	scaleZ := math.Exp2(z)
@@ -31,7 +34,7 @@ func (m LonLat) GetTileAndOffset(z float64) (*Tile, *gm.Point) {
 	pixelX := int(tileTempX*256.0) % 256
 	pixelY := int((1.0-tileTempY)*scaleZ*256.0) % 256
 	//
-	offsetPoint := &gm.Point{
+	offsetPoint := &Point{
 		float64(pixelX),
 		float64(pixelY),
 	}

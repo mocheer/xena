@@ -1,7 +1,6 @@
 package gm_test
 
 import (
-	"fmt"
 	"math/rand"
 	"testing"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPointInPolygon(t *testing.T) {
+func TestPolygonConctains(t *testing.T) {
 	rectangle := gm.Polygon{
 		{
 			{1.0, 1.0},
@@ -19,42 +18,52 @@ func TestPointInPolygon(t *testing.T) {
 		},
 	}
 
-	pt1 := gm.Point{1.1, 1.1}     // Should be true
-	pt2 := gm.Point{1.2, 1.2}     // Should be true
-	pt3 := gm.Point{1.3, 1.3}     // Should be true
-	pt4 := gm.Point{1.4, 1.4}     // Should be true
-	pt5 := gm.Point{1.5, 1.5}     // Should be true
-	pt6 := gm.Point{1.6, 1.6}     // Should be true
-	pt7 := gm.Point{1.7, 1.7}     // Should be true
-	pt8 := gm.Point{1.8, 1.8}     // Should be true
-	pt9 := gm.Point{-4.9, 1.2}    // Should be false
-	pt10 := gm.Point{10.0, 10.0}  // Should be false
-	pt11 := gm.Point{-5.0, -6.0}  // Should be false
-	pt12 := gm.Point{-13.0, 1.0}  // Should be false
-	pt13 := gm.Point{4.9, -1.2}   // Should be false
-	pt14 := gm.Point{10.0, -10.0} // Should be false
-	pt15 := gm.Point{5.0, 6.0}    // Should be false
-	pt16 := gm.Point{-13.0, 1.0}  // Should be false
+	pt1 := gm.Point{1.1, 1.1}
+	pt2 := gm.Point{1.2, 1.2}
+	pt3 := gm.Point{1.3, 1.3}
+	pt4 := gm.Point{1.4, 1.4}
+	pt5 := gm.Point{1.5, 1.5}
+	pt6 := gm.Point{1.6, 1.6}
+	pt7 := gm.Point{1.7, 1.7}
+	pt8 := gm.Point{1.8, 1.8}
+	pt9 := gm.Point{-4.9, 1.2}
+	pt10 := gm.Point{10.0, 10.0}
+	pt11 := gm.Point{-5.0, -6.0}
+	pt12 := gm.Point{-13.0, 1.0}
+	pt13 := gm.Point{4.9, -1.2}
+	pt14 := gm.Point{10.0, -10.0}
+	pt15 := gm.Point{5.0, 6.0}
+	pt16 := gm.Point{-13.0, 1.0}
 
-	assert.Equal(t, rectangle.ContainPoint(pt1), true)
-	assert.Equal(t, rectangle.ContainPoint(pt2), true)
-	assert.Equal(t, rectangle.ContainPoint(pt3), true)
-	assert.Equal(t, rectangle.ContainPoint(pt4), true)
-	assert.Equal(t, rectangle.ContainPoint(pt5), true)
-	assert.Equal(t, rectangle.ContainPoint(pt6), true)
-	assert.Equal(t, rectangle.ContainPoint(pt7), true)
-	assert.Equal(t, rectangle.ContainPoint(pt8), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt1), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt2), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt3), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt4), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt5), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt6), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt7), true)
+	assert.Equal(t, rectangle.ContainsPoint(pt8), true)
 	//
-	assert.Equal(t, rectangle.ContainPoint(pt9), false)
-	assert.Equal(t, rectangle.ContainPoint(pt10), false)
-	assert.Equal(t, rectangle.ContainPoint(pt11), false)
-	assert.Equal(t, rectangle.ContainPoint(pt12), false)
-	assert.Equal(t, rectangle.ContainPoint(pt13), false)
-	assert.Equal(t, rectangle.ContainPoint(pt14), false)
-	assert.Equal(t, rectangle.ContainPoint(pt15), false)
-	assert.Equal(t, rectangle.ContainPoint(pt16), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt9), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt10), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt11), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt12), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt13), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt14), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt15), false)
+	assert.Equal(t, rectangle.ContainsPoint(pt16), false)
+}
 
-	t.Log("Finished")
+func TestPolygonGrids(t *testing.T) {
+	poly := gm.Polygon{
+		{
+			{1.0, 1.0},
+			{1.0, 2.0},
+			{2.0, 2.0},
+		},
+	}
+	data := poly.Grids(0.1)
+	t.Log(data)
 }
 
 // TestBezierCurve 测试贝塞尔曲线
@@ -67,6 +76,6 @@ func TestBezierCurve(t *testing.T) {
 	bezierCurve := gm.NewBezierCurve(data)
 	points := bezierCurve.GetPoints(0.01)
 	for index, point := range points {
-		fmt.Println(index, point, point)
+		t.Log(index, point, point)
 	}
 }

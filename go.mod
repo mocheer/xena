@@ -10,6 +10,6 @@ require (
 	github.com/paulmach/go.geo v0.0.0-20180829195134-22b514266d33 // indirect
 	github.com/paulmach/go.geojson v1.4.0
 	github.com/rubenv/topojson v0.0.0-20180822134236-13be738db397
-	github.com/stretchr/testify v1.4.0 // indirect
+	github.com/stretchr/testify v1.4.0
 
 )
