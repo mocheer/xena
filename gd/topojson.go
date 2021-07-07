@@ -5,6 +5,10 @@ import (
 	"github.com/rubenv/topojson"
 )
 
-func NewTopology(fc *geojson.FeatureCollection) *topojson.Topology {
-	return topojson.NewTopology(fc, nil)
+func NewTopology(data []byte, opts *topojson.TopologyOptions) *topojson.Topology {
+	fc, err := geojson.UnmarshalFeatureCollection(data)
+	if err != nil {
+		panic(err)
+	}
+	return topojson.NewTopology(fc, opts)
 }
