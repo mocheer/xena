@@ -70,3 +70,16 @@ func TestTiff3(t *testing.T) {
 	fmt.Println(tfs.GetAlt(2, 0))
 	fmt.Println(tfs.GetAltByLonLat(107.42770367769998, 34.04409805640001))
 }
+
+func TestTiff4(t *testing.T) {
+	fileName := "./testdata/ASTGTMV003_N43E093/ASTGTMV003_N43E093_dem.tif"
+	tfs := gtif.Read(fileName)
+
+	fmt.Println(len(tfs.Tif.IFDs()))
+	fmt.Println(tfs.Width())
+	fmt.Println(tfs.Height())
+	fmt.Println(tfs.Origin())
+	fmt.Println(tfs.BBox())
+	fmt.Println(tfs.Scale())
+	fmt.Println(tfs.GetAltByLonLat(93.87096088876093, 43.07181417965543))
+}

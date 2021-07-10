@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/mocheer/pluto/fs"
 	"github.com/mocheer/xena/gm"
 	"github.com/stretchr/testify/assert"
 )
@@ -55,15 +56,10 @@ func TestPolygonConctains(t *testing.T) {
 }
 
 func TestPolygonGrids(t *testing.T) {
-	poly := gm.Polygon{
-		{
-			{1.0, 1.0},
-			{1.0, 2.0},
-			{2.0, 2.0},
-		},
-	}
-	data := poly.Grids(0.1)
-	t.Log(data)
+	poly := gm.NewPolygonFromJSON("./testdata/polygon.json")
+	data := poly.Grids(0.00001)
+	fs.SaveJSON("./testdata/polygon-grids.json", data)
+	t.Log(len(data))
 }
 
 // TestBezierCurve 测试贝塞尔曲线
@@ -79,3 +75,34 @@ func TestBezierCurve(t *testing.T) {
 		t.Log(index, point, point)
 	}
 }
+
+// func TestPolygonGrids2(t *testing.T) {
+// 	fileName := "./testdata/ASTGTMV003_N43E093/ASTGTMV003_N43E093_dem.tif"
+// 	tfs := gtif.Read(fileName)
+
+// 	size := 0.0001
+// 	// 源头
+// 	data := []float64{93.87096088876093, 43.07181417965543}
+// 	water := 1000 //假设水位10m，网格点为0.1m
+
+// 	for _, grid := range data {
+// 		lon, lat := grid[0], grid[1]
+// 		height := tfs.GetAltByLonLat(lon, lat)
+// 		//
+// 		grid1 := []float64{lon + size, lat}
+// 		grid2 := []float64{lon, lat + size}
+// 		grid3 := []float64{lon + size, lat + size}
+// 		grid4 := []float64{lon - size, lat}
+// 		grid5 := []float64{lon, lat - size}
+// 		grid6 := []float64{lon - size, lat - size}
+// 		grid7 := []float64{lon + size, lat - size}
+// 		grid8 := []float64{lon - size, lat + size}
+
+// 		if tfs.GetAltByLonLat(grid1) < height {
+
+// 		}
+
+// 	}
+
+// 	t.Log(len(data))
+// }

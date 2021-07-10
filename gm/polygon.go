@@ -1,9 +1,19 @@
 package gm
 
-import "math"
+import (
+	"math"
+
+	"github.com/mocheer/pluto/fs"
+)
 
 // Polygon 三维数组
 type Polygon [][][2]float64
+
+func NewPolygonFromJSON(fileName string) Polygon {
+	var p [][][2]float64
+	fs.ReadJSON(fileName, &p)
+	return Polygon(p)
+}
 
 // BBox 获取多边形的边界范围
 func (m Polygon) BBox() BBox {
@@ -56,6 +66,7 @@ func (m Polygon) ContainsPoint2(point [2]float64) bool {
 }
 
 // Grids 多边形网格化，返回网格点集合
+// @see https://github.com/camilleanne/square-grid
 func (m Polygon) Grids(cellSize float64) [][2]float64 {
 	bbox := m.BBox()
 	minX, minY := bbox.MinX(), bbox.MinY()
