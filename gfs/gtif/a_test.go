@@ -81,5 +81,7 @@ func TestTiff4(t *testing.T) {
 	fmt.Println(tfs.Origin())
 	fmt.Println(tfs.BBox())
 	fmt.Println(tfs.Scale())
-	fmt.Println(tfs.GetAltByLonLat(93.87096088876093, 43.07181417965543))
+	fmt.Println(tfs.Scale()[0] * 111110) //30.86 说明这个分辨率只有30米
+	fmt.Println(tfs.GetColRow(93.878768, 43.074783))
+	fmt.Println(tfs.GetAltByLonLat(93.878768, 43.074783)) // 1458 => 1455.0753793690708  Cesium.sampleTerrainMostDetailed(terrainProvider,[Cartographic.fromDegrees()])
 }
