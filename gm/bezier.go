@@ -1,7 +1,7 @@
 package gm
 
 import (
-	"math"
+	"github.com/mocheer/xena/alg"
 )
 
 //BezierCurve interface
@@ -36,32 +36,9 @@ func (m *bezierCurve) GetPoint(t float64) Point {
 	var y float64
 	n := len(data)
 	for i, p := range data {
-		b := formula(n-1, i, t)
+		b := alg.BezierFormula(n-1, i, t)
 		x += p[0] * b
 		y += p[1] * b
 	}
 	return Point{x, y}
-}
-
-//基函数
-func formula(n int, k int, t float64) float64 {
-	fk := float64(k)
-	fn := float64(n)
-	return c(n, k) * math.Pow(t, fk) * math.Pow(1-t, fn-fk)
-}
-
-//组合排序
-func c(n int, k int) float64 {
-	son := factorial(n)
-	mother := factorial(k) * factorial(n-k)
-	return float64(son) / float64(mother)
-}
-
-//阶乘
-func factorial(i int) int {
-	n := 1
-	for j := 1; j <= i; j++ {
-		n *= j
-	}
-	return n
 }

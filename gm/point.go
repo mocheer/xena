@@ -2,6 +2,10 @@ package gm
 
 type Point [2]float64
 
+func (m Point) LonLat() LonLat {
+	return LonLat(m)
+}
+
 // SetXY 设置坐标
 func (p *Point) SetXY(xy [2]float64) (err error) {
 	p[0] = xy[0]

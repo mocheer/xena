@@ -1,5 +1,7 @@
 package gm
 
+import "math"
+
 type BBox [4]float64
 
 // MinX
@@ -22,6 +24,15 @@ func (m BBox) MaxY() float64 {
 	return m[3]
 }
 
+// Polygon
+func (m BBox) Polygon() Polygon {
+	p1 := [2]float64{m.MinX(), m.MinY()}
+	p2 := [2]float64{m.MinX(), m.MaxY()}
+	p3 := [2]float64{m.MaxX(), m.MaxY()}
+	p4 := [2]float64{m.MaxX(), m.MinY()}
+	return Polygon{{p1, p2, p3, p4}}
+}
+
 // Width
 func (m BBox) Width() float64 {
 	return m.MaxX() - m.MinX()
@@ -33,6 +44,19 @@ func (m BBox) Height() float64 {
 }
 
 // ContainsPoint
-func (m BBox) ContainsPoint(point [2]float64) bool {
-	return point[0] < m.MaxX() && point[0] > m.MinX() && point[1] < m.MaxY() && point[1] > m.MinY()
+func (m BBox) ContainsPoint(p [2]float64) bool {
+	return p[0] < m.MaxX() && p[0] > m.MinX() && p[1] < m.MaxY() && p[1] > m.MinY()
+}
+
+// Extend
+func (m BBox) Extend(p [2]float64) {
+	m[0] = math.Min(p[0], m[0])
+	m[1] = math.Min(p[1], m[1])
+	m[2] = math.Max(p[0], m[2])
+	m[3] = math.Max(p[1], m[3])
+}
+
+// Center
+func (m *BBox) Center() [2]float64 {
+	return [2]float64{(m.MinX() + m.MaxX()) / 2, (m.MinY() + m.MaxY()) / 2}
 }

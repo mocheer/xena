@@ -2,18 +2,10 @@ package gm
 
 import (
 	"math"
-
-	"github.com/mocheer/pluto/fs"
 )
 
-// Polygon 三维数组
+// Polygon 三维数组，line+hole
 type Polygon [][][2]float64
-
-func NewPolygonFromJSON(fileName string) Polygon {
-	var p [][][2]float64
-	fs.ReadJSON(fileName, &p)
-	return Polygon(p)
-}
 
 // BBox 获取多边形的边界范围
 func (m Polygon) BBox() BBox {
