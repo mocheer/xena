@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/mocheer/pluto/fs"
 	"github.com/mocheer/xena/gm"
 	"github.com/stretchr/testify/assert"
 )
