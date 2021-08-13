@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/mocheer/pluto/ds/dsjson"
 	"github.com/mocheer/xena/gm"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,7 +58,7 @@ func TestPolygonConctains(t *testing.T) {
 func TestPolygonGrids(t *testing.T) {
 	poly := gm.NewPolygonFromJSON("./testdata/polygon.json")
 	data := poly.Grids(0.00001)
-	fs.SaveJSON("./testdata/polygon-grids.json", data)
+	dsjson.Save("./testdata/polygon-grids.json", data)
 	t.Log(len(data))
 }
 
