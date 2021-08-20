@@ -4,10 +4,9 @@ type Circle [3]float64
 
 // Center
 func (m Circle) Center() [2]float64 {
-	// return ([2]float64)(m)
-	var p [2]float64
-	copy(p[:], m[:2])
-	return p
+	// var p [2]float64
+	// copy(p[:], m[:2])
+	return *(*[2]float64)(m[:2])
 }
 
 // Radius
