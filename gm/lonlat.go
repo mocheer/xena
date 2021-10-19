@@ -23,6 +23,11 @@ func (m LonLat) Point() Point {
 	return Point(m)
 }
 
+// ConvertToPoint 将经纬度转换成平面坐标
+func (m LonLat) ConvertToPoint() *Point {
+	return &Point{}
+}
+
 // GetTileAndOffset 获取经纬度对应的瓦片信息，这里是基于3857投影
 func (m LonLat) GetTileAndOffset(z float64) (*Tile, *Point) {
 	lon := m.Lon()

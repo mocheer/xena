@@ -17,13 +17,13 @@ func Load(remoteURL, dirName string) error {
 		ds.Save(filepath.Join(dirName, name), data)
 		//
 		tiles := FromBytes(data)
-		loadTile(tiles.Root, remoteURL[:strings.LastIndex(remoteURL, "/")], dirName)
+		loading(tiles.Root, remoteURL[:strings.LastIndex(remoteURL, "/")], dirName)
 	}
 	return err
 }
 
-// loadTile 下载tile以及tile的所有子级
-func loadTile(t Tile, baseURL, dirName string) error {
+// loading 下载tile以及tile的所有子级
+func loading(t Tile, baseURL, dirName string) error {
 	contentURL := t.Content.Url
 	if contentURL == "" {
 		contentURL = t.Content.Uri
@@ -46,7 +46,7 @@ func loadTile(t Tile, baseURL, dirName string) error {
 	children := t.Children
 	if len(children) > 0 {
 		for _, t := range children {
-			err := loadTile(t, baseURL, dirName)
+			err := loading(t, baseURL, dirName)
 			if err != nil {
 				return err
 			}

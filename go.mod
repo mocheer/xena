@@ -20,7 +20,7 @@ require (
 	github.com/imroc/req v0.3.0 // indirect
 	github.com/paulmach/go.geo v0.0.0-20180829195134-22b514266d33 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/tidwall/gjson v1.8.0 // indirect
+	github.com/tidwall/gjson v1.8.1 // indirect
 	github.com/tidwall/match v1.0.3 // indirect
 	github.com/tidwall/pretty v1.1.0 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
