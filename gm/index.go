@@ -1,9 +1,9 @@
 package gm
 
-import "github.com/mocheer/pluto/ds/dsjson"
+import "github.com/mocheer/pluto/ds/ds_json"
 
 func NewPolygonFromJSON(fileName string) Polygon {
 	var p [][][2]float64
-	dsjson.Read(fileName, &p)
+	ds_json.Read(fileName, &p)
 	return Polygon(p)
 }
