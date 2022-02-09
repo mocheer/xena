@@ -5,8 +5,8 @@ import (
 	"math"
 	"path/filepath"
 
-	"github.com/mocheer/pluto/ds"
-	"github.com/mocheer/pluto/rh"
+	"github.com/mocheer/pluto/pkg/ds"
+	"github.com/mocheer/pluto/pkg/rh"
 )
 
 type LoadConfig struct {

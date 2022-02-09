@@ -3,7 +3,7 @@ package gd_test
 import (
 	"testing"
 
-	"github.com/mocheer/xena/gd"
+	gd "github.com/mocheer/xena/pkg/topojson"
 	"github.com/rubenv/topojson"
 )
 

@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/mocheer/pluto/ds/ds_json"
-	"github.com/mocheer/xena/gm"
+	"github.com/mocheer/pluto/pkg/ds/ds_json"
+	"github.com/mocheer/xena/pkg/gm"
 	"github.com/stretchr/testify/assert"
 )
 

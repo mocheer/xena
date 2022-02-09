@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mocheer/pluto/ds"
-	"github.com/mocheer/pluto/rh"
+	"github.com/mocheer/pluto/pkg/ds"
+	"github.com/mocheer/pluto/pkg/rh"
 )
 
 // Load 下载远程地址中的tileset以及其所有的tile

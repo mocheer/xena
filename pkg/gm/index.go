@@ -1,6 +1,6 @@
 package gm
 
-import "github.com/mocheer/pluto/ds/ds_json"
+import "github.com/mocheer/pluto/pkg/ds/ds_json"
 
 func NewPolygonFromJSON(fileName string) Polygon {
 	var p [][][2]float64

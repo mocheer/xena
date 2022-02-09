@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/liuvigongzuoshi/go-kriging/ordinarykriging"
-	"github.com/mocheer/pluto/assert"
-	"github.com/mocheer/xena/alg/kriging"
+	"github.com/mocheer/pluto/pkg/assert"
+	"github.com/mocheer/xena/pkg/kriging"
 )
 
 var values = []float64{6.4, 3.3, 8.9, 1.8, 7.2, 1.5, 3.1, 5.7, 5}
