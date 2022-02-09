@@ -3,7 +3,7 @@ package gm
 import (
 	"math"
 
-	"github.com/mocheer/xena/alg"
+	"github.com/mocheer/xena/pkg/alg"
 )
 
 type LonLat [2]float64

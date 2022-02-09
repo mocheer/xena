@@ -3,7 +3,7 @@ package gm
 import (
 	"math"
 
-	"github.com/mocheer/xena/alg"
+	"github.com/mocheer/xena/pkg/alg"
 )
 
 // TileF 地图瓦片

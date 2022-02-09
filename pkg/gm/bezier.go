@@ -1,7 +1,7 @@
 package gm
 
 import (
-	"github.com/mocheer/xena/alg"
+	"github.com/mocheer/xena/pkg/alg"
 )
 
 //BezierCurve interface
