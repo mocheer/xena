@@ -3,7 +3,7 @@ package pbf_test
 import (
 	"testing"
 
-	"github.com/mocheer/xena/gfs/pbf"
+	"github.com/mocheer/xena/pkg/pbf"
 )
 
 func TestTopojson(t *testing.T) {

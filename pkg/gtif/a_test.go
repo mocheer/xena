@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/mocheer/xena/alg/proj4"
-	"github.com/mocheer/xena/gfs/gtif"
+	"github.com/mocheer/xena/pkg/gtif"
+	"github.com/mocheer/xena/pkg/proj4"
 )
 
 func TestTiff(t *testing.T) {

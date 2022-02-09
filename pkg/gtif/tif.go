@@ -14,7 +14,7 @@ import (
 	"github.com/google/tiff"
 	"github.com/google/tiff/bigtiff"
 	_ "github.com/google/tiff/geotiff"
-	"github.com/mocheer/xena/gfs/gtif/lzw"
+	"github.com/mocheer/xena/pkg/gtif/lzw"
 )
 
 type Gtif struct {

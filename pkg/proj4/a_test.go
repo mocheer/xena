@@ -3,7 +3,7 @@ package proj4_test
 import (
 	"testing"
 
-	"github.com/mocheer/xena/alg/proj4"
+	"github.com/mocheer/xena/pkg/proj4"
 )
 
 // TestUTMToWGS84 将一个utm投影坐标转成wgs84的经纬度坐标
