@@ -1,4 +1,4 @@
-package gd_test
+package topojson_test
 
 import (
 	"testing"

@@ -1,14 +1,14 @@
-package gd
+package topojson
 
 import (
 	geojson "github.com/paulmach/go.geojson"
-	"github.com/rubenv/topojson"
+	topoj "github.com/rubenv/topojson"
 )
 
-func NewTopology(data []byte, opts *topojson.TopologyOptions) *topojson.Topology {
+func NewTopology(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
 	fc, err := geojson.UnmarshalFeatureCollection(data)
 	if err != nil {
 		panic(err)
 	}
-	return topojson.NewTopology(fc, opts)
+	return topoj.NewTopology(fc, opts)
 }
