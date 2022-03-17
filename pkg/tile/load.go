@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/mocheer/pluto/pkg/ds"
+	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/pluto/pkg/rh"
 )
 
@@ -17,7 +18,7 @@ type LoadConfig struct {
 
 // Load 下载瓦片服务中的所有瓦片数据
 func Load(remoteURL, dirName string) error {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 18; i++ {
 		loadingByZoom(remoteURL, i, dirName)
 	}
 	return nil
@@ -30,7 +31,7 @@ func loadingByZoom(rootUrl string, zoom int, dirName string) error {
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
 			zoomRowColumn := fmt.Sprintf("%d/%d/%d", zoom, i, j)
-			url := rootUrl + zoomRowColumn
+			url := fn.FmtString(rootUrl, map[string]interface{}{"z": zoom, "x": i, "y": j})
 			dirPath := filepath.Join(dirName, zoomRowColumn)
 			if !ds.IsExist(dirPath) {
 				data, err := rh.Get(url)
@@ -47,7 +48,6 @@ func loadingByZoom(rootUrl string, zoom int, dirName string) error {
 					if maxErrorCount < 0 {
 						return nil
 					}
-
 				}
 			}
 
