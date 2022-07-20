@@ -2,6 +2,11 @@ package gm
 
 import "math"
 
+// @see https://github.com/go-spatial/geom/blob/master/bbox.go
+// @see https://github.com/spatial-go/geoos/blob/main/geojson/bbox.go
+// @see https://github.com/ctessum/geom/blob/master/bounds.go
+// @see https://github.com/spatial-go/geoos/blob/main/space/bound.go
+// Bbox
 type BBox [4]float64
 
 // MinX
@@ -49,7 +54,7 @@ func (m BBox) ContainsPoint(p [2]float64) bool {
 }
 
 // Extend
-func (m BBox) Extend(p [2]float64) {
+func (m *BBox) Extend(p [2]float64) {
 	m[0] = math.Min(p[0], m[0])
 	m[1] = math.Min(p[1], m[1])
 	m[2] = math.Max(p[0], m[2])
@@ -57,6 +62,6 @@ func (m BBox) Extend(p [2]float64) {
 }
 
 // Center
-func (m *BBox) Center() [2]float64 {
+func (m BBox) Center() [2]float64 {
 	return [2]float64{(m.MinX() + m.MaxX()) / 2, (m.MinY() + m.MaxY()) / 2}
 }

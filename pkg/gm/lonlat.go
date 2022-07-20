@@ -48,3 +48,25 @@ func (m LonLat) GetTileAndOffset(z float64) (*Tile, *Point) {
 	}
 	return &Tile{X: int(tileX), Y: int(tileY), Z: int(z)}, offsetPoint
 }
+
+// GetPointPX 获取经纬度对应的像素坐标，这里是基于3857投影
+func (m LonLat) GetPointPX(z float64) *Point {
+	return m.GetPointPX(math.Exp2(z) * 256)
+}
+
+// GetPointPXByScale 获取经纬度对应的像素坐标，这里是基于3857投影
+func (m LonLat) GetPointPXByScale(scale float64) *Point {
+	lon := m.Lon()
+	lat := m.Lat()
+	tileTempX := (lon + 180.0) / 360.0 * scale
+	tileTempY := math.Log(math.Tan(lat*alg.RADIANS_PER_DEGREE*0.5+alg.PI_OVER_FOUR)) / alg.PI2
+	//
+	pixelX := tileTempX
+	pixelY := (1.0 - tileTempY) * scale
+	//
+	offsetPoint := &Point{
+		float64(pixelX),
+		float64(pixelY),
+	}
+	return offsetPoint
+}

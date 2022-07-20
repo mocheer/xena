@@ -12,3 +12,12 @@ func NewTopology(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
 	}
 	return topoj.NewTopology(fc, opts)
 }
+
+// UnmarshalTopology
+func UnmarshalTopology(data []byte) *topoj.Topology {
+	result, err := topoj.UnmarshalTopology(data)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}

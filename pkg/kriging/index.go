@@ -1,7 +1,7 @@
 package kriging
 
 import (
-	"github.com/liuvigongzuoshi/go-kriging/ordinarykriging"
+	"github.com/lvisei/go-kriging/ordinarykriging"
 )
 
 type k struct {
@@ -41,4 +41,10 @@ func (m *k) Contour(xWidth int, yWidth int) *ordinarykriging.ContourRectangle {
 func (m *k) SaveGridPng(grid *ordinarykriging.GridMatrices, dst string, xWidth int, yWidth int, levelColors []ordinarykriging.GridLevelColor) error {
 	ctx := m.Variogram.Plot(grid, xWidth, yWidth, grid.Xlim, grid.Ylim, levelColors)
 	return ctx.SavePNG(dst)
+}
+
+// Output
+func (m *k) Output(grid *ordinarykriging.GridMatrices, xWidth int, yWidth int, levelColors []ordinarykriging.GridLevelColor) ([]byte, error) {
+	ctx := m.Variogram.Plot(grid, xWidth, yWidth, grid.Xlim, grid.Ylim, levelColors)
+	return ctx.Output()
 }

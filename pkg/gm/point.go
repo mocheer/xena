@@ -12,3 +12,8 @@ func (p *Point) SetXY(xy [2]float64) (err error) {
 	p[1] = xy[1]
 	return
 }
+
+// Sub
+func (p *Point) Sub(xy [2]float64) *Point {
+	return &Point{p[0] - xy[0], p[1] - xy[1]}
+}
