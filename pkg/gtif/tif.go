@@ -14,29 +14,41 @@ import (
 	"github.com/google/tiff"
 	"github.com/google/tiff/bigtiff"
 	_ "github.com/google/tiff/geotiff"
+
 	"github.com/mocheer/xena/pkg/gtif/lzw"
 )
 
+//
 type Gtif struct {
 	Tif       tiff.TIFF
 	Data      []float64
 	IFD_Index int
 }
 
-func Read(fileName string) *Gtif {
+func Read(fileName string) (*Gtif, error) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
-	tif, err := tiff.Parse(f, nil, nil)
+	return parse(f)
+}
+
+func ReadBytes(bs []byte) (*Gtif, error) {
+	f := bytes.NewReader(bs)
+	return parse(f)
+}
+
+//
+func parse(reader tiff.ReadAtReadSeeker) (*Gtif, error) {
+	tif, err := tiff.Parse(reader, nil, nil)
 	if err != nil {
 		panic(err)
 	}
 	m := &Gtif{Tif: tif}
 	// m.IFD_Index = len(m.Tif.IFDs()) - 1
-	m.Data, _ = m.readData()
-	return m
+	m.Data, err = m.readData()
+	return m, err
 }
 
 // HasField 判断是否存在tagID对那个的field
@@ -159,7 +171,7 @@ func (m Gtif) Transform() []float64 {
 	return m.GetFloat(tModelTransformationTag)
 }
 
-// GetColRow 获取经纬度对应的行列坐标
+// GetColRow 获取经纬度对应的行列坐标，这种算法不一定精确，不一定等间隔
 func (m Gtif) GetColRow(lon, lat float64) [2]int {
 	origin := m.Origin()
 	scale := m.Scale()
@@ -215,14 +227,12 @@ func (m Gtif) GetAlt(column, row int) float64 {
 func (m Gtif) GetAltByLonLat(lon, lat float64) float64 {
 	colrow := m.GetColRow(lon, lat)
 	col, row := colrow[0], colrow[1]
-	fmt.Println(col, row)
 	return m.GetAlt(col, row)
 }
 
 //
 func (m Gtif) readData() (data []float64, err error) {
 	tif := m.Tif
-	// fmt.Println(tif.IFDs())
 	compressionType := m.GetFirstInt(tCompression)
 	SampleFormat := m.GetFirstInt(tSampleFormat)
 
@@ -297,13 +307,16 @@ func (m Gtif) readData() (data []float64, err error) {
 				_, err = tif.R().ReadAt(buf, offset)
 
 			case cLZW: // lzw 压缩
-				//  这里为什么不是用 compress/lzw （两者有所区别，区别点是什么待研究）
+				// tiff文件采用类似compress/lzw但不兼容的算法
+				// 目前有部分文件解析失败  unexpected EOF
 				r := lzw.NewReader(io.NewSectionReader(tif.R(), offset, n), lzw.MSB, 8)
-				defer r.Close()
 				buf, err = io.ReadAll(r)
-
+				r.Close()
+				// 这里其实可能存在错误（unexpected EOF），其实GeoTiffjs一样有这个错误，但仍可获取数据
+				// 目前获取到的数据和GeoTiff存在差别
 				if err != nil {
-					println(err)
+					fmt.Println(err)
+					// return nil, err
 				}
 			case cDeflate, cDeflateOld:
 				r, err := zlib.NewReader(io.NewSectionReader(tif.R(), offset, n))
@@ -311,10 +324,10 @@ func (m Gtif) readData() (data []float64, err error) {
 					return nil, err
 				}
 				buf, err = io.ReadAll(r)
+				r.Close()
 				if err != nil {
 					return nil, err
 				}
-				r.Close()
 			case cPackBits:
 
 			default:

@@ -2,7 +2,8 @@ package gm
 
 type Point [2]float64
 
-func (m Point) LonLat() LonLat {
+// 转换成ToLonLat
+func (m Point) ToLonLat() LonLat {
 	return LonLat(m)
 }
 

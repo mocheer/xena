@@ -1,5 +1,11 @@
 package gm
 
+import (
+	"math"
+
+	"github.com/mocheer/xena/pkg/alg"
+)
+
 // Tile 地图瓦片
 type Tile struct {
 	X, Y, Z int
@@ -39,4 +45,11 @@ func (m Tile) Down(distance int) *Tile { //
  */
 func (m Tile) Left(distance int) *Tile {
 	return &Tile{m.Y, m.X - distance, m.Z}
+}
+
+// GetLonLat 获取瓦片所在的经纬度
+func (m Tile) GetLonLat() *LonLat {
+	x, y, z := float64(m.X), float64(m.Y), float64(m.Z)
+	n := math.Pi - 2*math.Pi*y/math.Pow(2, z)
+	return &LonLat{x/math.Exp2(z)*360 - 180, (alg.DEGREES_PER_RADIAN * math.Atan(0.5*(math.Exp(n)-math.Exp(-1.0*n))))}
 }

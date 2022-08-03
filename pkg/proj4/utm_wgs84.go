@@ -2,6 +2,7 @@ package proj4
 
 import "fmt"
 
+// 专用于UTM投影WGS84基准面的proj
 type UTM_WGS84_ZONE int
 
 // EPSGCode
@@ -15,7 +16,12 @@ func (m UTM_WGS84_ZONE) EPSGCode() EPSGCode {
 	return code
 }
 
-// ConvertToWGS84
-func (m UTM_WGS84_ZONE) ConvertToWGS84(xy []float64) ([]float64, error) {
+// Convert 经纬度转投影坐标系
+func (m UTM_WGS84_ZONE) Convert(xy []float64) ([]float64, error) {
+	return Convert(m.EPSGCode(), xy)
+}
+
+// Inverse 投影坐标系转经纬度
+func (m UTM_WGS84_ZONE) Inverse(xy []float64) ([]float64, error) {
 	return Inverse(m.EPSGCode(), xy)
 }

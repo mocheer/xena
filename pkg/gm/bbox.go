@@ -7,6 +7,7 @@ import "math"
 // @see https://github.com/ctessum/geom/blob/master/bounds.go
 // @see https://github.com/spatial-go/geoos/blob/main/space/bound.go
 // Bbox
+// 左下右上，先经度后纬度
 type BBox [4]float64
 
 // MinX

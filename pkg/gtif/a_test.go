@@ -5,11 +5,12 @@ import (
 
 	"github.com/mocheer/xena/pkg/gtif"
 	"github.com/mocheer/xena/pkg/proj4"
+	"github.com/samber/lo"
 )
 
 func TestTiff(t *testing.T) {
 	fileName := "./testdata/SRTM3_V4_90m.tif" // GCS_WGS_1984
-	tfs := gtif.Read(fileName)
+	tfs, _ := gtif.Read(fileName)
 
 	t.Log(tfs.Tif.IFDs()[0])
 	// 107.85853701103325 34.12743138973333 107.34437034436667 33.849098056400045
@@ -26,7 +27,7 @@ func TestTiff(t *testing.T) {
 func TestBigTiff(t *testing.T) {
 	// UTM 投影：经度采用6度分带，纬度采用8度分带，从80S到84N共20个纬度带（X带多4度），分别用C到X的字母来表示
 	fileName := "./testdata/utm/54R_20200101-20210101.tif" //这是一个bigtiff格式的文件
-	tfs := gtif.Read(fileName)
+	tfs, _ := gtif.Read(fileName)
 
 	tfs.IFD_Index = 0
 	t.Log(len(tfs.Tif.IFDs()))
@@ -36,12 +37,12 @@ func TestBigTiff(t *testing.T) {
 	//
 	t.Log(tfs.GetLonLat(100, 100))
 	xy := tfs.GetLonLat(100, 100)
-	t.Log(proj4.UTM_WGS84_ZONE(54).ConvertToWGS84([]float64{xy[0], xy[1]}))
+	t.Log(proj4.UTM_WGS84_ZONE(54).Inverse([]float64{xy[0], xy[1]}))
 }
 
 func TestTiff2(t *testing.T) {
-	fileName := "./testdata/ASTGTMV003_N53E125/ASTGTMV003_N53E125_dem.tif" // lzw 压缩
-	tfs := gtif.Read(fileName)
+	fileName := "./testdata/ASTGTMV003_N53E125_dem.tif" // lzw 压缩
+	tfs, _ := gtif.Read(fileName)
 
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())
@@ -57,8 +58,8 @@ func TestTiff2(t *testing.T) {
 }
 
 func TestTiff3(t *testing.T) {
-	fileName := "./testdata/ASTGTMV003_N34E107/ASTGTMV003_N34E107_dem.tif"
-	tfs := gtif.Read(fileName)
+	fileName := "./testdata/ASTGTMV003_N34E107_dem.tif"
+	tfs, _ := gtif.Read(fileName)
 
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())
@@ -74,8 +75,8 @@ func TestTiff3(t *testing.T) {
 }
 
 func TestTiff4(t *testing.T) {
-	fileName := "./testdata/ASTGTMV003_N43E093/ASTGTMV003_N43E093_dem.tif"
-	tfs := gtif.Read(fileName)
+	fileName := "./testdata/ASTGTMV003_N43E093_dem.tif"
+	tfs, _ := gtif.Read(fileName)
 	//
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())                              // 宽度
@@ -83,7 +84,25 @@ func TestTiff4(t *testing.T) {
 	t.Log(tfs.Origin())                             // 起点
 	t.Log(tfs.BBox())                               // 范围
 	t.Log(tfs.Scale())                              // 系数
-	t.Log(tfs.Scale()[0] * 111110)                  // 30.86 说明这个分辨率只有30米
+	t.Log(tfs.Scale()[0] * 111110)                  // 30.86 说明这个水平分辨率只有30米，这个算法是一个模糊值
 	t.Log(tfs.GetColRow(93.878768, 43.074783))      // 获取经纬度对应的网格位置
 	t.Log(tfs.GetAltByLonLat(93.878768, 43.074783)) // 获取当前经纬度对应的高度 1458 => 1455.0753793690708  Cesium.sampleTerrainMostDetailed(terrainProvider,[Cartographic.fromDegrees()])
+	t.Log(tfs.GetAltByLonLat(93.278768, 43.074783))
+}
+
+func TestTiff5(t *testing.T) {
+	fileName := "./testdata/ASTGTMV003_N03E112_dem.tif"
+	tfs, err := gtif.Read(fileName)
+	if err != nil {
+		t.Fatal(err)
+	}
+	//
+	t.Log(len(tfs.Tif.IFDs()))
+	t.Log(tfs.Width())             // 宽度
+	t.Log(tfs.Height())            // 高度
+	t.Log(tfs.Origin())            // 起点
+	t.Log(tfs.BBox())              // 范围
+	t.Log(tfs.Scale())             // 系数
+	t.Log(tfs.Scale()[0] * 111110) // 30.86 说明这个水平分辨率只有30米，这个算法是一个模糊值
+	t.Log(len(lo.Filter(tfs.Data, func(v float64, _ int) bool { return v != 0 })))
 }

@@ -6,6 +6,7 @@
 
 @see https://search.asf.alaska.edu
 @see http://www.tuxingis.com
+@see http://www.gscloud.cn/   
 
 ### jblindsay/go-spatial
 - 在tiff格式之外还支持其他栅格数据文件
@@ -15,13 +16,15 @@
 - 会将ifds合并，排在后面的ifd优先级更高，这个机制应该是错的
 
 ### google/tiff
-- 不支持获取高程数据（灰度值），包括相关的lzw压缩算法等
+- 没有直接支持获取高程数据（灰度值），包括相关的lzw压缩算法等（在另外的库中，且lzw算法目前有问题，无法解析部分lzw压缩的tiff文件）
 
 ### bigtiff
 - BigTiff的文件头固定为8个字节，分别为49 49 2B 00 08 00 00 00。读取程序检测得到这8个字节即可判定文件为BigTiff格式。
 - BigTiff的文件尾固定为8个全零字节
 
 ### geotiff
+- 可解析`golang.org/x/image/tiff/lzw`算法不支持的tiff文件
+
 ```go
 // Tags (see p. 28-41 of the spec).
 var tagMap = map[int]string{

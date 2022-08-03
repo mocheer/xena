@@ -6,9 +6,14 @@ tmp
 vendor
 public
 config
+
+# node
+node_modules/
+
 # 
 data
 log
 
 gfs/raster
 testdata/
+

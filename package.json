@@ -1,8 +1,11 @@
 {
  "name": "xena",
- "version": "1.0.1",
+ "version": "1.0.2",
  "author": "mocheer",
  "description": "",
  "license": "MIT",
- "scripts": {}
+ "scripts": {},
+ "dependencies": {
+  "geotiff": "^2.0.5"
+ }
 }
