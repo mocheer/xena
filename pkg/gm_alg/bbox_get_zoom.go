@@ -3,6 +3,7 @@ package gm_alg
 import (
 	"math"
 
+	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/xena/pkg/gm"
 )
 
@@ -10,4 +11,9 @@ import (
 func GetZoom(bbox gm.BBox, size [2]float64) float64 {
 	scale := size[0] / 256 / (bbox.Width() / 360.0)
 	return math.Log2(scale)
+}
+
+// GetZoomInt
+func GetZoomInt(bbox gm.BBox, size [2]float64) int {
+	return fn.RoundInt(GetZoom(bbox, size))
 }

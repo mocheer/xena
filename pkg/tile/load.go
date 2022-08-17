@@ -3,22 +3,26 @@ package tile
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"path/filepath"
 
 	"github.com/mocheer/pluto/pkg/console"
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/mocheer/pluto/pkg/ts/awt"
 	"github.com/mocheer/pluto/pkg/web_request"
 	"github.com/mocheer/xena/pkg/gm"
 	"github.com/mocheer/xena/pkg/tile_arcgis"
 )
 
 type LoadConfig struct {
-	URL     string
-	DirName string
-	MinZoom int
-	MaxZoom int
-	Origin  string
+	URL        string
+	DirName    string
+	MinZoom    int
+	MaxZoom    int
+	Origin     string
+	Subdomains []string
+	SavePath   string
 }
 
 // LoadArcgis 下载arcgis本地图包中的所有瓦片数据
@@ -30,12 +34,12 @@ func LoadArcgis(localPath, dirName string) error {
 
 	for z := 0; z < 18; z++ {
 		size := int(math.Pow(2, float64(z)))
-		for i := 0; i < size; i++ {
-			for j := 0; j < size; j++ {
-				zoomRowColumn := fmt.Sprintf("%d/%d/%d", z, i, j)
+		for x := 0; x < size; x++ {
+			for y := 0; y < size; y++ {
+				zoomRowColumn := fmt.Sprintf("%d/%d/%d", z, x, y)
 				dirPath := filepath.Join(dirName, zoomRowColumn)
 				data, _ := service.ReadTile(gm.Tile{
-					Z: z, X: i, Y: j,
+					Z: z, X: x, Y: y,
 				})
 				if len(data) != 0 {
 					if !ds.IsExist(dirPath) {
@@ -66,52 +70,57 @@ func Load(lc *LoadConfig) error {
 }
 
 // loadingByZoom 下载tile
-func loadingByZoom(lc *LoadConfig, zoom int) error {
+func loadingByZoom(lc *LoadConfig, z int) error {
+	size := int(math.Pow(2, float64(z)))
+	at := awt.New(10, 1000)
+	//
+	startX := 0
+	startY := 0
+	endX := size
+	endY := size
+	//
+	if z >= 10 {
+		p1 := gm.LonLat{73, 54}
+		p2 := gm.LonLat{136, 3}
+		t1, _ := p1.GetTileAndOffset(float64(z))
+		t2, _ := p2.GetTileAndOffset(float64(z))
+		startX = t1.X
+		startY = t1.Y
+		endX = t2.X
+		endY = t2.Y
+	}
 
-	size := int(math.Pow(2, float64(zoom)))
-	count := size * size
-	fns := make([]func(), 0, count)
-
-	for i := 0; i < size; i++ {
-		for j := 0; j < size; j++ {
-			fns = append(fns, func(i, j int) func() {
-				return func() {
-					loadingByXYZ(lc, &gm.Tile{X: i, Y: j, Z: zoom})
-				}
-			}(i, j))
+	for x := startX; x < endX; x++ {
+		for y := startY; y < endY; y++ {
+			tile := &gm.Tile{X: x, Y: y, Z: z}
+			at.Add(func(args ...any) {
+				tile := args[0].(*gm.Tile)
+				loadingByXYZ(lc, tile)
+			}, tile)
 		}
 	}
-	step := 1
-	if count > 16 {
-		step = count / 8
-	}
-
-	fn.GoFns(step, fns).Wait()
+	at.Wait()
 	return nil
 }
 
 func loadingByXYZ(lc *LoadConfig, tile *gm.Tile) error {
-
-	if tile.Z >= 12 {
-		lonlat := tile.GetLonLat()
-		if lonlat[0] < 70 && lonlat[0] > 140 {
-			return nil
-		}
-
-		if lonlat[1] < 0 && lonlat[0] > 60 {
-			return nil
-		}
-	}
-
 	rootUrl := lc.URL
 	dirName := lc.DirName
 	origin := lc.Origin
 
 	x, y, z := tile.X, tile.Y, tile.Z
+	savePath := lc.SavePath
 
-	zoomRowColumn := fmt.Sprintf("%d/%d/%d.png", z, x, y)
-	url := fn.FmtString(rootUrl, map[string]any{"z": z, "x": x, "y": y})
-	dirPath := filepath.Join(dirName, zoomRowColumn)
+	if savePath == "" {
+		savePath = "{z}/{x}/{y}.png"
+	}
+	fpath := fn.FmtString(savePath, map[string]any{"z": z, "x": x, "y": y})
+	s := ""
+	if lc.Subdomains != nil {
+		s = lc.Subdomains[rand.Intn(len(lc.Subdomains))]
+	}
+	url := fn.FmtString(rootUrl, map[string]any{"z": z, "x": x, "y": y, "s": s})
+	dirPath := filepath.Join(dirName, fpath)
 	if !ds.IsExist(dirPath) {
 
 		err := web_request.Save(url, dirPath, origin)
@@ -121,8 +130,8 @@ func loadingByXYZ(lc *LoadConfig, tile *gm.Tile) error {
 			// 休眠一小会，防止被认为是爬虫抓取数据
 			// time.Sleep(time.Millisecond * 100)
 		} else {
-			msg := fmt.Sprintf("下载瓦片失败：%s", err)
-			console.Log(msg)
+			msg := fmt.Sprintf("下载瓦片失败：%s , %s ", url, err)
+			console.Warn(msg)
 		}
 	}
 	return nil

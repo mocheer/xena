@@ -69,7 +69,7 @@ func ReadOSM(fileName string) *P_Result {
 
 // ReadOSMNode 专门用来读取osm的pbf文件
 // tag  name:zh highway oneway lanes
-func ReadOSMNode(fileName string, callback func(interface{})) {
+func ReadOSMNode(fileName string, callback func(any)) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		log.Fatal(err)
