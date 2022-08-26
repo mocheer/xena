@@ -68,12 +68,12 @@ func (m AsciiGrid) ToGeoJSON(legends []float64, zone int) (data []*d3_contour.Co
 	data = d3_contour.Contour().Size([]int{m.Ncols, m.Nrows}).Thresholds(legends).Contours(lo.Flatten(m.Data))[1:]
 
 	if zone > 0 {
-		proj := proj4.UTM_WGS84_ZONE(50).Inverse
+		proj := proj4.UTM_WGS84_ZONE(zone).Inverse
 		lo.ForEach(data, func(polygon *d3_contour.ContourPolygon, _ int) {
 			polygon.Coordinates = lo.Map(polygon.Coordinates, func(coor3 [][][2]float64, _ int) [][][2]float64 {
 				return lo.Map(coor3, func(coor2 [][2]float64, _ int) [][2]float64 {
 					return lo.Map(coor2, func(coor [2]float64, _ int) [2]float64 {
-						p, _ := proj([]float64{coor[0] + m.Xllcorner, m.Yllcorner - coor[1]})
+						p, _ := proj([]float64{coor[0]*m.Cellsize + m.Xllcorner, m.Yllcorner + float64(m.Nrows)*m.Cellsize - coor[1]*m.Cellsize})
 						return [2]float64{fn.Round(p[0], 5), fn.Round(p[1], 5)}
 					})
 				})

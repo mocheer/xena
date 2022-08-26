@@ -66,3 +66,16 @@ func (m *BBox) Extend(p [2]float64) {
 func (m BBox) Center() [2]float64 {
 	return [2]float64{(m.MinX() + m.MaxX()) / 2, (m.MinY() + m.MaxY()) / 2}
 }
+
+// ExtendBySizeScale
+// ExtendBySizeScale(8.0/256.0)
+func (m BBox) ExtendBySizeScale(scale float64) BBox {
+	w := m.Width() * scale
+	h := m.Height() * scale
+	return BBox{
+		m.MinX() - w,
+		m.MinY() - h,
+		m.MaxX() + w,
+		m.MaxY() + h,
+	}
+}

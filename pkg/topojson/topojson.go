@@ -13,6 +13,16 @@ func NewTopology(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
 	return topoj.NewTopology(fc, opts)
 }
 
+func NewTopologyByFeature(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
+	f, err := geojson.UnmarshalFeature(data)
+	if err != nil {
+		panic(err)
+	}
+	fc := geojson.NewFeatureCollection()
+	fc.AddFeature(f)
+	return topoj.NewTopology(fc, opts)
+}
+
 // UnmarshalTopology
 func UnmarshalTopology(data []byte) *topoj.Topology {
 	result, err := topoj.UnmarshalTopology(data)
