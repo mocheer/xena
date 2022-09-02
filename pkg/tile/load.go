@@ -87,8 +87,8 @@ func GetChinaTileLimit(z int) (int, int, int, int) {
 	endY := 0
 	//
 	if z >= 10 {
-		p1 := gm.LonLat{73.6, 53.6}
-		p2 := gm.LonLat{135.1, 3.8}
+		p1 := gm.LonLat{74, 54}
+		p2 := gm.LonLat{135, 4}
 		t1, _ := p1.GetTileAndOffset(float64(z))
 		t2, _ := p2.GetTileAndOffset(float64(z))
 		startX = t1.X
