@@ -10,6 +10,7 @@ import (
 	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/pluto/pkg/ts/awt"
 	"github.com/mocheer/pluto/pkg/utp"
+	"github.com/mocheer/xena/pkg/crs"
 	"github.com/mocheer/xena/pkg/gm"
 )
 
@@ -81,6 +82,7 @@ func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 
 // GetChinaTileLimit
 func GetChinaTileLimit(z int) (int, int, int, int) {
+	EPSG3857 := crs.FromSRID(3857)
 	startX := 0
 	startY := 0
 	endX := 0
@@ -89,8 +91,8 @@ func GetChinaTileLimit(z int) (int, int, int, int) {
 	if z >= 10 {
 		p1 := gm.LonLat{74, 54}
 		p2 := gm.LonLat{135, 4}
-		t1, _ := p1.GetTileAndOffset(float64(z))
-		t2, _ := p2.GetTileAndOffset(float64(z))
+		t1, _ := EPSG3857.LonlatToTileAndOffset(p1, float64(z))
+		t2, _ := EPSG3857.LonlatToTileAndOffset(p2, float64(z))
 		startX = t1.X
 		startY = t1.Y
 		endX = t2.X
