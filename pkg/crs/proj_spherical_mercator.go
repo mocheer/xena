@@ -7,6 +7,7 @@ import (
 	"github.com/mocheer/xena/pkg/gm"
 )
 
+// 墨卡托投影算法，对坐标进行墨卡托投影变换
 type ProjSphericalMercator struct{}
 
 func (m ProjSphericalMercator) MaxLat() float64 {
