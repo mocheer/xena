@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mocheer/pluto/pkg/ts"
 	"github.com/mocheer/xena/pkg/gm"
 )
 
@@ -20,7 +19,7 @@ func NewTileArcgis(confPath string) (*TileArcgis, error) {
 	if err != nil {
 		return nil, err
 	}
-	var config ts.ArcgisTileLayerConfig
+	var config ArcgisTileLayerConfig
 	err = xml.Unmarshal(confXML, &config)
 	if err != nil {
 		return nil, err
