@@ -54,6 +54,14 @@ func (m BBox) ContainsPoint(p [2]float64) bool {
 	return p[0] < m.MaxX() && p[0] > m.MinX() && p[1] < m.MaxY() && p[1] > m.MinY()
 }
 
+// FromSlices
+func (m *BBox) FromSlices(values []float64) {
+	m[0] = values[0]
+	m[1] = values[1]
+	m[2] = values[2]
+	m[3] = values[3]
+}
+
 // Extend
 func (m *BBox) Extend(p [2]float64) {
 	m[0] = math.Min(p[0], m[0])

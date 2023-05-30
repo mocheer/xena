@@ -13,7 +13,7 @@ func GetZoom(bbox gm.BBox, size [2]float64) float64 {
 	return math.Log2(scale)
 }
 
-// GetZoomInt
-func GetZoomInt(bbox gm.BBox, size [2]float64) int {
+// GetZoomRound
+func GetZoomRound(bbox gm.BBox, size [2]float64) int {
 	return fn.RoundInt(GetZoom(bbox, size))
 }

@@ -13,7 +13,7 @@ type Tile struct {
 	X, Y, Z int
 }
 
-// NewTileFromQuadKey
+// NewTileFromQuadKey 从quadKey实例化Tile对象
 func NewTileFromQuadKey(quadKey string) Tile {
 	x := 0
 	y := 0

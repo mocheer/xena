@@ -8,7 +8,6 @@ type k struct {
 	Variogram *ordinarykriging.Variogram
 }
 
-//
 func New(values, x, y []float64) *k {
 	return &k{
 		Variogram: ordinarykriging.NewOrdinary(values, x, y),

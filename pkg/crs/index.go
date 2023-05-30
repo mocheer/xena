@@ -12,19 +12,23 @@ type CRS struct {
 	Transformation
 }
 
+// LonlatToPoint 经纬度转投影坐标
 func (m CRS) LonlatToPoint(lonlat gm.LonLat, zoom float64) gm.Point {
 	return m.Transform(m.Proj(lonlat), math.Exp2(zoom))
 }
 
+// PointToLonlat 投影坐标转经纬度
 func (m CRS) PointToLonlat(point gm.Point, zoom float64) gm.LonLat {
 	return m.UnProj(m.UnTransform(point, math.Exp2(zoom)))
 }
 
+// LonlatToTile 经纬度转瓦片坐标
 func (m CRS) LonlatToTile(lonlat gm.LonLat, zoom float64) gm.Tile {
 	p1 := m.LonlatToPoint(lonlat, zoom)
 	return gm.Tile{X: int(p1[0]), Y: int(p1[1]), Z: int(zoom)}
 }
 
+// LonlatToTileAndOffset
 func (m CRS) LonlatToTileAndOffset(lonlat gm.LonLat, zoom float64) (gm.Tile, gm.Point) {
 	p1 := m.LonlatToPoint(lonlat, zoom)
 	tx := int(p1[0])

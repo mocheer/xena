@@ -35,5 +35,5 @@ func (m ProjSphericalMercator) Proj(lonlat gm.LonLat) gm.Point {
 func (m ProjSphericalMercator) UnProj(point gm.Point) gm.LonLat {
 	r := m.radius()
 	d := alg.DEGREES_PER_RADIAN
-	return gm.LonLat{(2*math.Atan(math.Exp(point[1]/r)) - (math.Pi / 2)) * d, point[0] * d / r}
+	return gm.LonLat{point[0] * d / r, (2*math.Atan(math.Exp(point[1]/r)) - (math.Pi / 2)) * d}
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/mocheer/pluto/pkg/ds"
-	"github.com/mocheer/pluto/pkg/rh"
+	"github.com/mocheer/pluto/pkg/ts/ctp"
 )
 
 // Load 下载远程地址中的tileset以及其所有的tile
@@ -22,7 +22,7 @@ func Load(remoteURL, dirName string) error {
 	if isFileExist {
 		data, err = os.ReadFile(fileName)
 	} else {
-		data, err = rh.Get(remoteURL)
+		data, err = ctp.Get(remoteURL)
 
 	}
 	//
@@ -43,23 +43,25 @@ func Load(remoteURL, dirName string) error {
 
 // loading 下载tile以及tile的所有子级
 func loading(t Tile, baseURL, dirName string) error {
-	contentURL := t.Content.Url
-	if contentURL == "" {
-		contentURL = t.Content.Uri
-	}
-	if contentURL != "" {
-		contentRemoteURL := baseURL + "/" + contentURL
-		relativePath := dirName + "/" + contentURL
-		fmt.Println(contentRemoteURL)
+	if t.Content != nil {
+		contentURL := t.Content.Url
+		if contentURL == "" {
+			contentURL = t.Content.Uri
+		}
+		if contentURL != "" {
+			contentRemoteURL := baseURL + "/" + contentURL
+			relativePath := dirName + "/" + contentURL
+			fmt.Println(contentRemoteURL)
 
-		// 这是一个json描述文件
-		if strings.HasSuffix(contentURL, ".json") {
-			Load(contentRemoteURL, filepath.Dir(relativePath))
-		} else { // 一个b3dm文件
-			if !ds.IsExist(relativePath) {
-				err := ds.Load(contentRemoteURL, relativePath)
-				if err != nil {
-					return err
+			// 这是一个json描述文件
+			if strings.HasSuffix(contentURL, ".json") {
+				Load(contentRemoteURL, filepath.Dir(relativePath))
+			} else { // 一个b3dm文件
+				if !ds.IsExist(relativePath) {
+					err := ds.Load(contentRemoteURL, relativePath)
+					if err != nil {
+						return err
+					}
 				}
 			}
 		}

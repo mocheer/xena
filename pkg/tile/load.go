@@ -9,7 +9,7 @@ import (
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/pluto/pkg/ts/awt"
-	"github.com/mocheer/pluto/pkg/utp"
+	"github.com/mocheer/pluto/pkg/ts/ctp"
 	"github.com/mocheer/xena/pkg/crs"
 	"github.com/mocheer/xena/pkg/gm"
 )
@@ -53,7 +53,6 @@ func (m *LoadConfig) loadingByZoom(z int, callback func(*gm.Tile) error) error {
 func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 	rootUrl := m.URL
 	dirName := m.DirName
-	origin := m.Origin
 
 	x, y, z := tile.X, tile.Y, tile.Z
 	savePath := m.SavePath
@@ -61,12 +60,12 @@ func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 	if savePath == "" {
 		savePath = "{z}/{x}/{y}.png"
 	}
-	fpath := fn.FmtString(savePath, map[string]any{"z": z, "x": x, "y": y})
-	url := fn.FmtString(rootUrl, map[string]any{"z": z, "x": x, "y": y, "s": m.GetRandSubdomains()})
+	fpath := fn.FormatByMap(savePath, map[string]any{"z": z, "x": x, "y": y})
+	url := fn.FormatByMap(rootUrl, map[string]any{"z": z, "x": x, "y": y, "s": m.GetRandSubdomains()})
 	dirPath := filepath.Join(dirName, fpath)
 	if !ds.IsExist(dirPath) {
 
-		err := utp.Save(url, dirPath, origin)
+		err := ctp.Save(url, dirPath)
 		if err == nil {
 			msg := fmt.Sprintf("下载瓦片成功：%s", url)
 			console.Log(msg)
