@@ -41,6 +41,7 @@ func NewTileArcgis(confPath string) (*TileArcgis, error) {
 
 // ReadTile 返回瓦片数据
 func (server *TileArcgis) ReadTile(tile gm.Tile) ([]byte, error) {
+
 	switch server.CacheFormat {
 	case EsriMapCacheStorageModeCompactV2:
 		return server.ReadCompactTileV2(tile)
@@ -61,8 +62,10 @@ func (server *TileArcgis) ReadCompactTile(tile gm.Tile) ([]byte, error) {
 	}
 	defer bundlx.Close()
 	bundlx.Seek((16 + (5 * imgDataIndex)), io.SeekStart)
-	bOffset := make([]byte, 5)
+	bOffset := make([]byte, 4, 8)
 	bundlx.Read(bOffset)
+	bOffset = bOffset[:8] //防止<8，使得 binary.LittleEndian.Uint64 报错
+	//
 	offset := int64(binary.LittleEndian.Uint64(bOffset))
 	bundle, err := os.Open(bundlePath)
 	if err != nil {
@@ -70,9 +73,11 @@ func (server *TileArcgis) ReadCompactTile(tile gm.Tile) ([]byte, error) {
 	}
 	defer bundle.Close()
 	bundle.Seek(offset, io.SeekStart)
-	bLength := make([]byte, 4)
+	bLength := make([]byte, 3, 4)
+	bLength = bLength[:4] //防止<4，使得 binary.LittleEndian.Uint32 报错
+	//
 	bundle.Read(bLength)
-	length := binary.LittleEndian.Uint64(bLength)
+	length := binary.LittleEndian.Uint32(bLength)
 	imgBytes := make([]byte, length)
 	bundle.Read(imgBytes)
 	return imgBytes, nil
@@ -93,7 +98,6 @@ func (server *TileArcgis) ReadCompactTileV2(tile gm.Tile) ([]byte, error) {
 	}
 	defer bundle.Close()
 	bundle.Seek(int64(offset), io.SeekStart)
-
 	offsetBytes := make([]byte, 5, 8)
 	sizeBytes := make([]byte, 3, 4)
 

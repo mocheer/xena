@@ -79,7 +79,7 @@ func (m Tile) GetLonLat() *LonLat {
 	return &LonLat{x/math.Exp2(z)*360 - 180, (alg.DEGREES_PER_RADIAN * math.Atan(0.5*(math.Exp(n)-math.Exp(-1.0*n))))}
 }
 
-// ToQuadKey
+// ToQuadKey 必应地图瓦片id的算法
 func (m Tile) ToQuadKey() string {
 	x, y, z := m.X, m.Y, m.Z
 	var buffer bytes.Buffer

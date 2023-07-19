@@ -14,6 +14,7 @@ type Provider struct {
 	URL        string
 	Subdomains []string
 	Vars       map[string]string
+	Loader     *ctp.Ctp
 }
 
 func (m Provider) GetTileURL(t *gm.Tile) string {
@@ -24,9 +25,12 @@ func (m Provider) GetTileURL(t *gm.Tile) string {
 	return fn.FormatByMap(m.URL, data)
 }
 
-func (m Provider) LoadTile(t *gm.Tile) ([]byte, error) {
+func (m *Provider) LoadTile(t *gm.Tile) ([]byte, error) {
 	url := m.GetTileURL(t)
-	data, err := ctp.Get(url)
+	if m.Loader == nil {
+		m.Loader = ctp.New()
+	}
+	data, err := m.Loader.Get(url)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("reptile '%s' error: %s", url, err))
 	}

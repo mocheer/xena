@@ -24,7 +24,7 @@ type AsciiGrid struct {
 
 // Read
 func Read(fileName string) *AsciiGrid {
-	s, err := ds_text.Read(fileName)
+	s, err := ds_text.ReadFile(fileName)
 	if err != nil {
 		return nil
 	}

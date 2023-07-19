@@ -1,7 +1,7 @@
 package tile_arcgis
 
 // TileArcgis implements TileCache for ESRI local files
-// @see https://github.com/wthorp/AGES/tree/master/pkg/sources/tilecache
+// @see https://github.com/wthorp/AGES/tree/master/pkg/sources/tilecache  ==> 这个源码一堆错误，容错率低
 // @see https://github.com/fuzhenn/tiler-arcgis-bundle/blob/master/index.js
 type TileArcgis struct {
 	BaseDirectory string // 根目录

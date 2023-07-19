@@ -28,7 +28,7 @@ func (m CRS) LonlatToTile(lonlat gm.LonLat, zoom float64) gm.Tile {
 	return gm.Tile{X: int(p1[0]), Y: int(p1[1]), Z: int(zoom)}
 }
 
-// LonlatToTileAndOffset
+// LonlatToTileAndOffset 经纬度转成瓦片坐标和瓦片上的位置坐标
 func (m CRS) LonlatToTileAndOffset(lonlat gm.LonLat, zoom float64) (gm.Tile, gm.Point) {
 	p1 := m.LonlatToPoint(lonlat, zoom)
 	tx := int(p1[0])
