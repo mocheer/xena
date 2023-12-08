@@ -58,7 +58,7 @@ func loading(t Tile, baseURL, dirName string) error {
 				Load(contentRemoteURL, filepath.Dir(relativePath))
 			} else { // 一个b3dm文件
 				if !ds.IsExist(relativePath) {
-					err := ds.Load(contentRemoteURL, relativePath)
+					err := ctp.Save(contentRemoteURL, relativePath)
 					if err != nil {
 						return err
 					}

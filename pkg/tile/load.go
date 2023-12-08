@@ -29,6 +29,7 @@ func (m LoadConfig) Load(callback func(*gm.Tile) error) error {
 }
 
 // loadingByZoom 下载tile
+// loadingByZoom(z,m.loadingAndSave)
 func (m *LoadConfig) loadingByZoom(z int, callback func(*gm.Tile) error) error {
 	count := m.FiberCount
 	if count == 0 {
@@ -50,6 +51,7 @@ func (m *LoadConfig) loadingByZoom(z int, callback func(*gm.Tile) error) error {
 	return nil
 }
 
+// loadingAndSave
 func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 	rootUrl := m.URL
 	dirName := m.DirName

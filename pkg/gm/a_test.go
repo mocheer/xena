@@ -58,7 +58,7 @@ func TestPolygonConctains(t *testing.T) {
 func TestPolygonGrids(t *testing.T) {
 	poly := gm.NewPolygonFromJSON("./testdata/polygon.json")
 	data := poly.Grids(0.00001)
-	ds_json.Save(data, "./testdata/polygon-grids.json")
+	ds_json.Save("./testdata/polygon-grids.json",data)
 	t.Log(len(data))
 }
 

@@ -63,23 +63,103 @@ func ReadText(s string) *AsciiGrid {
 	return ag
 }
 
-// ToGeoJSON
-func (m AsciiGrid) ToGeoJSON(legends []float64, zone int) (data []*d3_contour.ContourPolygon) {
-	data = d3_contour.Contour().Size([]int{m.Ncols, m.Nrows}).Thresholds(legends).Contours(lo.Flatten(m.Data))[1:]
+// Contour
+func (m AsciiGrid) Contour(legends []float64) (data []*d3_contour.ContourPolygon) {
+	return d3_contour.Contour().Size([]int{m.Ncols, m.Nrows}).Thresholds(legends).Contours(lo.Flatten(m.Data))[1:]
+}
 
-	if zone > 0 {
-		proj := proj4.UTM_WGS84_ZONE(zone).Inverse
-		lo.ForEach(data, func(polygon *d3_contour.ContourPolygon, _ int) {
-			polygon.Coordinates = lo.Map(polygon.Coordinates, func(coor3 [][][2]float64, _ int) [][][2]float64 {
-				return lo.Map(coor3, func(coor2 [][2]float64, _ int) [][2]float64 {
-					return lo.Map(coor2, func(coor [2]float64, _ int) [2]float64 {
-						p, _ := proj([]float64{coor[0]*m.Cellsize + m.Xllcorner, m.Yllcorner + float64(m.Nrows)*m.Cellsize - coor[1]*m.Cellsize})
-						return [2]float64{fn.Round(p[0], 5), fn.Round(p[1], 5)}
-					})
+// ToUTMGeoJSON
+func (m AsciiGrid) ToUTMGeoJSON(legends []float64, zone int, precision int) (data []*d3_contour.ContourPolygon) {
+	data = m.Contour(legends)
+	proj := proj4.UTM_WGS84_ZONE(zone).Inverse
+	minX := m.Xllcorner
+	maxY := m.Yllcorner + float64(m.Nrows)*m.Cellsize
+	lo.ForEach(data, func(polygon *d3_contour.ContourPolygon, _ int) {
+		polygon.Coordinates = lo.Map(polygon.Coordinates, func(coor3 [][][2]float64, _ int) [][][2]float64 {
+			return lo.Map(coor3, func(coor2 [][2]float64, _ int) [][2]float64 {
+				return lo.Map(coor2, func(coor [2]float64, _ int) [2]float64 {
+					p, _ := proj([]float64{coor[0]*m.Cellsize + minX, maxY - coor[1]*m.Cellsize})
+					c1 := p[0]
+					c2 := p[1]
+					if precision > 0 {
+						c1, c2 = fn.Round(c1, precision), fn.Round(c2, precision)
+					}
+					return [2]float64{c1, c2}
 				})
 			})
 		})
-	}
-
+	})
 	return
+}
+
+// ToGeoJSON
+func (m AsciiGrid) ToGeoJSON(legends []float64, precision int) (data []*d3_contour.ContourPolygon) {
+	data = m.Contour(legends)
+	minX := m.Xllcorner
+	maxY := m.Yllcorner + float64(m.Nrows)*m.Cellsize
+	lo.ForEach(data, func(polygon *d3_contour.ContourPolygon, _ int) {
+		polygon.Coordinates = lo.Map(polygon.Coordinates, func(coor3 [][][2]float64, _ int) [][][2]float64 {
+			return lo.Map(coor3, func(coor2 [][2]float64, _ int) [][2]float64 {
+				return lo.Map(coor2, func(coor [2]float64, _ int) [2]float64 {
+					c1 := coor[0]*m.Cellsize + minX
+					c2 := maxY - coor[1]*m.Cellsize
+					if precision > 0 {
+						c1, c2 = fn.Round(c1, precision), fn.Round(c2, precision)
+					}
+					return [2]float64{c1, c2}
+				})
+			})
+		})
+	})
+	return
+}
+
+// func (m AsciiGrid) Union(legends []float64) []polygol.Geom {
+// 	result := make([][][2]int, len(legends)+1, len(legends)+1)
+// 	for y, row := range m.Data {
+// 		for x, val := range row {
+// 			if val != m.NodataValue {
+// 				index := getIndexLegend(legends, val)
+// 				p1 := [2]int{x, y}
+// 				result[index] = append(result[index], p1)
+// 			}
+// 		}
+// 	}
+// 	result2 := make([]polygol.Geom, len(result), len(result))
+
+// 	for i, p := range result {
+// 		if len(p) > 0 {
+// 			var err error
+// 			geoms := lo.Map(p, func(p [2]int, index int) polygol.Geom {
+// 				x := float64(p[0])
+// 				y := float64(p[1])
+
+// 				return polygol.Geom{
+// 					{
+// 						{
+// 							[]float64{x, y},
+// 							[]float64{x + 1, y},
+// 							[]float64{x + 1, y + 1},
+// 							[]float64{x, y + 1},
+// 						},
+// 					},
+// 				}
+// 			})
+// 			result2[i], err = polygol.Union(geoms[0], geoms[1:]...)
+// 			if err != nil {
+// 				panic(err)
+// 			}
+// 		}
+// 	}
+// 	return result2
+
+// }
+
+func getIndexLegend(legends []float64, val float64) int {
+	for i, v := range legends {
+		if val <= v {
+			return i
+		}
+	}
+	return len(legends) - 1
 }

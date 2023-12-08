@@ -1,7 +1,7 @@
 package tile_arcgis
 
 // TileLayerConfig corresponds to an ESRI conf.xml document
-type ArcgisTileLayerConfig struct {
+type ArcgisTileConfig struct {
 	TileCacheInfo struct {
 		LODInfos struct {
 			LODInfo []struct {

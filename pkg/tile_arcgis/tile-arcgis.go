@@ -2,25 +2,22 @@ package tile_arcgis
 
 import (
 	"encoding/binary"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/mocheer/pluto/pkg/ds"
+	"github.com/mocheer/pluto/pkg/ds/ds_xml"
 	"github.com/mocheer/xena/pkg/gm"
 )
 
 // NewTileArcgis 根据config.xml实例化服务
 func NewTileArcgis(confPath string) (*TileArcgis, error) {
 	server := &TileArcgis{}
-	confXML, err := os.ReadFile(confPath)
-	if err != nil {
-		return nil, err
-	}
-	var config ArcgisTileLayerConfig
-	err = xml.Unmarshal(confXML, &config)
+	var config ArcgisTileConfig
+	err := ds_xml.ReadFile(confPath, &config)
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +32,14 @@ func NewTileArcgis(confPath string) (*TileArcgis, error) {
 		server.ColsPerFile, server.RowsPerFile = *packetSize, *packetSize
 	} else {
 		server.ColsPerFile, server.RowsPerFile = 1, 1
+	}
+	//cdi
+	cdiPath := server.BaseDirectory + "/conf.cdi"
+	if ds.IsExist(cdiPath) {
+		var cdi ArcgisTileCDI
+		ds_xml.ReadFile(cdiPath, &cdi)
+		server.Bbox = cdi.GetBbox()
+		server.BboxC = cdi.GetLonLatBbox()
 	}
 	return server, nil
 }
