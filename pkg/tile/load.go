@@ -36,7 +36,8 @@ func (m *LoadConfig) loadingByZoom(z int, callback func(*gm.Tile) error) error {
 		count = 10
 	}
 	at := awt.New(count, 100)
-	startX, startY, endX, endY := GetChinaTileLimit(z)
+	srid := 3857
+	startX, startY, endX, endY := GetChinaTileLimit(srid, z)
 	//
 	for x := startX; x < endX; x++ {
 		for y := startY; y < endY; y++ {
@@ -82,26 +83,39 @@ func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 }
 
 // GetChinaTileLimit
-func GetChinaTileLimit(z int) (int, int, int, int) {
-	EPSG3857 := crs.FromSRID(3857)
+func GetChinaTileLimit(srid int, z int) (int, int, int, int) {
+	return GetTileLimitByBbox(srid, z, gm.BBox{74, 4, 135, 54})
+}
+
+// GetChinaTileLimit
+func GetTileLimitByBbox(srid int, z int, bbox gm.BBox) (int, int, int, int) {
+	prj := crs.FromSRID(srid)
 	startX := 0
 	startY := 0
 	endX := 0
 	endY := 0
 	//
 	if z >= 10 {
-		p1 := gm.LonLat{74, 54}
-		p2 := gm.LonLat{135, 4}
-		t1, _ := EPSG3857.LonlatToTileAndOffset(p1, float64(z))
-		t2, _ := EPSG3857.LonlatToTileAndOffset(p2, float64(z))
+		p1 := gm.LonLat{bbox.MinX(), bbox.MaxY()}
+		p2 := gm.LonLat{bbox.MaxX(), bbox.MinY()}
+		t1, _ := prj.LonlatToTileAndOffset(p1, float64(z))
+		t2, _ := prj.LonlatToTileAndOffset(p2, float64(z))
 		startX = t1.X
 		startY = t1.Y
 		endX = t2.X
 		endY = t2.Y
 	} else {
-		size := int(math.Pow(2, float64(z)))
-		endX = size
-		endY = size
+		switch srid {
+		case 3857:
+			size := int(math.Pow(2, float64(z)))
+			endX = size
+			endY = size
+		case 4326:
+
+			size := int(math.Pow(2, float64(z)))
+			endX = size * 2
+			endY = size
+		}
 	}
 	return startX, startY, endX, endY
 }

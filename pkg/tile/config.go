@@ -1,12 +1,17 @@
 package tile
 
-import "math/rand"
+import (
+	"math/rand"
+
+	"github.com/mocheer/xena/pkg/gm"
+)
 
 type LoadConfig struct {
 	URL        string
 	DirName    string
 	MinZoom    int
 	MaxZoom    int
+	Bbox       gm.BBox
 	Origin     string
 	Subdomains []string
 	SavePath   string

@@ -12,11 +12,12 @@ import (
 // LoadArcgis 下载arcgis本地图包中的所有瓦片数据
 func LoadArcgis(localPath, dirName string) error {
 	service, err := tile_arcgis.NewTileArcgis(filepath.Join(localPath, "conf.xml"))
+	srid := 3857
 	if err != nil {
 		return err
 	}
 	for z := 0; z < 18; z++ {
-		startX, startY, endX, endY := GetChinaTileLimit(z)
+		startX, startY, endX, endY := GetChinaTileLimit(srid, z)
 		for x := startX; x < endX; x++ {
 			for y := startY; y < endY; y++ {
 				zoomRowColumn := fmt.Sprintf("%d/%d/%d", z, x, y)

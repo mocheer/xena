@@ -3,7 +3,6 @@ package gm
 import (
 	"bytes"
 	"math"
-	"strconv"
 
 	"github.com/mocheer/xena/pkg/alg"
 )
@@ -11,29 +10,6 @@ import (
 // Tile 地图瓦片
 type Tile struct {
 	X, Y, Z int
-}
-
-// NewTileFromQuadKey 从quadKey实例化Tile对象
-func NewTileFromQuadKey(quadKey string) Tile {
-	x := 0
-	y := 0
-	z := len(quadKey)
-	for i := z; i > 0; i-- {
-		mask := 1 << (i - 1)
-		switch string(quadKey[z-i]) {
-		case "0":
-		case "1":
-			x |= mask
-		case "2":
-			y |= mask
-		case "3":
-			x |= mask
-			y |= mask
-		default:
-			panic("无效的QuadKey")
-		}
-	}
-	return Tile{z, y, z}
 }
 
 /**
@@ -79,12 +55,35 @@ func (m Tile) GetLonLat() *LonLat {
 	return &LonLat{x/math.Exp2(z)*360 - 180, (alg.DEGREES_PER_RADIAN * math.Atan(0.5*(math.Exp(n)-math.Exp(-1.0*n))))}
 }
 
+// FromQuadKey 从quadKey实例化Tile对象
+func FromQuadKey(quadKey string) Tile {
+	x := 0
+	y := 0
+	z := len(quadKey)
+	for i := z; i > 0; i-- {
+		mask := 1 << (i - 1)
+		switch string(quadKey[z-i]) {
+		case "0":
+		case "1":
+			x |= mask
+		case "2":
+			y |= mask
+		case "3":
+			x |= mask
+			y |= mask
+		default:
+			panic("无效的QuadKey")
+		}
+	}
+	return Tile{z, y, z}
+}
+
 // ToQuadKey 必应地图瓦片id的算法
 func (m Tile) ToQuadKey() string {
 	x, y, z := m.X, m.Y, m.Z
 	var buffer bytes.Buffer
 	for i := z; i > 0; i-- {
-		digit := 0
+		digit := '0'
 		mask := 1 << (i - 1)
 		if (x & mask) != 0 {
 			digit++
@@ -93,7 +92,7 @@ func (m Tile) ToQuadKey() string {
 			digit++
 			digit++
 		}
-		buffer.WriteString(strconv.Itoa(digit))
+		buffer.WriteRune(digit)
 	}
 	return buffer.String()
 }

@@ -2,11 +2,17 @@ package tianditu
 
 import "strings"
 
-const URL string = "http://t{s}.tianditu.gov.cn/DataServer?T={v}&x={x}&y={y}&l={z}&tk=070a93160eddd5f891599e51a6b764ac"
+const URL string = "http://t{s}.tianditu.gov.cn/DataServer?T={v}&x={x}&y={y}&l={z}&tk={t}"
 
 var tokens = []string{
 	"070a93160eddd5f891599e51a6b764ac",
 	"60714a8ef3e4491df43827cd34c2aa22",
+	"2c6c6c00cbb9f83e135243a4bf30162c",
+	"34568012b0e7be57119fa5124bd7bdd6",
+	"5d2a5431b4d468c54a025de39f039190",
+	"ee1087d5e54c8e3933bd38ebdb9d8ad1",
+	"171a747a409509e9ce89fb59845e09de",
+	// "16554181e1d8f9f3b82ce84fe953c164",
 }
 
 var subdomains = strings.Split("01234567", "")
