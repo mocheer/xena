@@ -1,6 +1,6 @@
 module github.com/mocheer/xena
 
-go 1.21.0
+go 1.22.0
 
 require (
 	github.com/go-spatial/proj v0.2.0

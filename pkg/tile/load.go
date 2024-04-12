@@ -87,35 +87,34 @@ func GetChinaTileLimit(srid int, z int) (int, int, int, int) {
 	return GetTileLimitByBbox(srid, z, gm.BBox{74, 4, 135, 54})
 }
 
-// GetChinaTileLimit
+// GetTileLimitByBbox
+// 注意，当srid=4326时，这个算法比postgis中的 ST_TileEnvelope(z,x,y,ST_MakeEnvelope(-180, -270, 180, 90, 4326))中的z多1的差值
+// 也就是说真实的z传递过来时需要+1，前端leaflet一般会设置zoomoffset+1
 func GetTileLimitByBbox(srid int, z int, bbox gm.BBox) (int, int, int, int) {
 	prj := crs.FromSRID(srid)
+	p1 := gm.LonLat{bbox.MinX(), bbox.MaxY()}
+	p2 := gm.LonLat{bbox.MaxX(), bbox.MinY()}
+	t1, _ := prj.LonlatToTileAndOffset(p1, float64(z))
+	t2, _ := prj.LonlatToTileAndOffset(p2, float64(z))
+	return t1.X, t1.Y, t2.X, t2.Y
+}
+
+// GetTileLimit
+func GetTileLimit(srid int, z int) (int, int, int, int) {
 	startX := 0
 	startY := 0
 	endX := 0
 	endY := 0
 	//
-	if z >= 10 {
-		p1 := gm.LonLat{bbox.MinX(), bbox.MaxY()}
-		p2 := gm.LonLat{bbox.MaxX(), bbox.MinY()}
-		t1, _ := prj.LonlatToTileAndOffset(p1, float64(z))
-		t2, _ := prj.LonlatToTileAndOffset(p2, float64(z))
-		startX = t1.X
-		startY = t1.Y
-		endX = t2.X
-		endY = t2.Y
-	} else {
-		switch srid {
-		case 3857:
-			size := int(math.Pow(2, float64(z)))
-			endX = size
-			endY = size
-		case 4326:
-
-			size := int(math.Pow(2, float64(z)))
-			endX = size * 2
-			endY = size
-		}
+	switch srid {
+	case 3857:
+		size := int(math.Pow(2, float64(z)))
+		endX = size
+		endY = size
+	case 4326:
+		size := int(math.Pow(2, float64(z)))
+		endX = size * 2
+		endY = size
 	}
 	return startX, startY, endX, endY
 }
