@@ -8,7 +8,7 @@ import (
 	"github.com/mocheer/xena/pkg/tile"
 )
 
-var china = []float64{109, 20.2, 122, 40}
+var china = []float64{73.502355, 3.39716187, 135.09567, 53.563269}
 
 func TestXxx(t *testing.T) {
 	z := 8

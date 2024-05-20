@@ -1,8 +1,9 @@
 package provider
 
 import (
+	"errors"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 
 	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/pluto/pkg/ts/ctp"
@@ -34,10 +35,21 @@ func (m *Provider) LoadTile(t *gm.Tile) ([]byte, error) {
 	return data, nil
 }
 
+// LoadTileWithRetry
+func (m *Provider) LoadTileWithRetry(num int, t *gm.Tile) ([]byte, error) {
+	for range num {
+		data, err := m.LoadTile(t)
+		if err == nil {
+			return data, nil
+		}
+	}
+	return nil, errors.New("error load")
+}
+
 func (m Provider) GetRandSubdomains() string {
 	s := ""
 	if m.Subdomains != nil {
-		s = m.Subdomains[rand.Intn(len(m.Subdomains))]
+		s = m.Subdomains[rand.IntN(len(m.Subdomains))]
 	}
 	return s
 }
@@ -45,7 +57,7 @@ func (m Provider) GetRandSubdomains() string {
 func (m Provider) GetRandToken() string {
 	s := ""
 	if m.Tokens != nil {
-		s = m.Tokens[rand.Intn(len(m.Tokens))]
+		s = m.Tokens[rand.IntN(len(m.Tokens))]
 	}
 	return s
 }

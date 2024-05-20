@@ -1,13 +1,11 @@
 package tianditu
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 	"time"
 
 	"github.com/mocheer/pluto/pkg/ts/ctp"
-	"github.com/mocheer/xena/pkg/gm"
 	"github.com/mocheer/xena/pkg/provider"
 )
 
@@ -19,23 +17,6 @@ func New(config provider.Provider) *TiandituMap {
 	config.Tokens = tokens
 	config.Loader = createLoader()
 	return &TiandituMap{Provider: config}
-}
-
-func (m *TiandituMap) LoadTile(t *gm.Tile) ([]byte, error) {
-	return m.retry(0, t)
-}
-
-func (m *TiandituMap) retry(index int, t *gm.Tile) ([]byte, error) {
-	data, err := m.Provider.LoadTile(t)
-	if err != nil {
-		// fmt.Println(index, err)
-		// time.Sleep(time.Millisecond * 500)
-		if index < 7 {
-			return m.retry(index+1, t)
-		}
-		fmt.Println(index, err)
-	}
-	return data, err
 }
 
 func createLoader() *ctp.Ctp {

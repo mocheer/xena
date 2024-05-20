@@ -1,7 +1,7 @@
 package tile
 
 import (
-	"math/rand"
+	"math/rand/v2"
 
 	"github.com/mocheer/xena/pkg/gm"
 )
@@ -21,7 +21,7 @@ type LoadConfig struct {
 func (m LoadConfig) GetRandSubdomains() string {
 	s := ""
 	if m.Subdomains != nil {
-		s = m.Subdomains[rand.Intn(len(m.Subdomains))]
+		s = m.Subdomains[rand.IntN(len(m.Subdomains))]
 	}
 	return s
 }

@@ -83,8 +83,9 @@ func (m *LoadConfig) loadingAndSave(tile *gm.Tile) error {
 }
 
 // GetChinaTileLimit
+// var china = []float64{73.502355, 3.39716187, 135.09567, 53.563269}
 func GetChinaTileLimit(srid int, z int) (int, int, int, int) {
-	return GetTileLimitByBbox(srid, z, gm.BBox{74, 4, 135, 54})
+	return GetTileLimitByBbox(srid, z, gm.BBox{73.502355, 3.39716187, 135.09567, 53.563269})
 }
 
 // GetTileLimitByBbox
