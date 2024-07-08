@@ -16,14 +16,14 @@ var (
 type Tileset struct {
 	Asset              Asset              `json:"asset"`
 	GeometricError     float64            `json:"geometricError"`
-	Root               Tile               `json:"root"`
+	Root               *Tile              `json:"root"`
 	Properties         *map[string]Schema `json:"properties,omitempty"`
 	ExtensionsUsed     *[]string          `json:"extensionsUsed,omitempty"`
 	ExtensionsRequired *[]string          `json:"extensionsRequired,omitempty"`
 }
 
 // ToJSON
-func (ts *Tileset) ToJSON() (string, error) {
-	b, e := json.Marshal(ts)
+func (m *Tileset) ToJSON() (string, error) {
+	b, e := json.Marshal(m)
 	return string(b), e
 }

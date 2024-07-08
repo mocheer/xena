@@ -4,10 +4,12 @@ go 1.22.0
 
 require (
 	github.com/go-spatial/proj v0.2.0
+	github.com/lukeroth/gdal v0.0.0-20240301124940-d4ff2229365e
 	github.com/lvisei/go-kriging v0.0.1-alpha.15
 	github.com/mocheer/pluto v1.1.8
 	github.com/paulmach/go.geojson v1.5.0
 	github.com/qedus/osmpbf v1.2.0
+	github.com/qmuntal/gltf v0.26.0
 	github.com/rubenv/topojson v0.0.0-20220429141232-de429a870e0a
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
@@ -20,8 +22,6 @@ require (
 	github.com/antchfx/xmlquery v1.3.11 // indirect
 	github.com/antchfx/xpath v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/engelsjk/polygol v0.0.3 // indirect
-	github.com/engelsjk/splay-tree v0.0.1 // indirect
 	github.com/fogleman/gg v1.3.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0 // indirect
@@ -31,7 +31,6 @@ require (
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/matoous/go-nanoid/v2 v2.0.0 // indirect
 	github.com/paulmach/go.geo v0.0.0-20180829195134-22b514266d33 // indirect
-	github.com/paulmach/orb v0.10.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect

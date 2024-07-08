@@ -7,5 +7,5 @@ type Tile struct {
 	GeometricError      float64         `json:"geometricError"`
 	Refine              string          `json:"refine"`
 	Transform           *[16]float64    `json:"transform,omitempty"`
-	Children            []Tile          `json:"children,omitempty"`
+	Children            []*Tile         `json:"children,omitempty"`
 }
