@@ -78,3 +78,18 @@ func CalcEnuToEcefMatrix(lnt, lat, heightMin float64) [16]float64 {
 		1,
 	}
 }
+
+// IsBoundingBoxesOverlap
+// 这里判断两个aabb是否重叠
+func IsBoundingBoxesOverlap(box1, box2 *tileset.BoundingVolume, tolerance float64) bool {
+	r1 := box1.GetRegion()
+	r2 := box2.GetRegion()
+	check1 := (r1[0] - r2[2]) < tolerance // w1 < e2
+	check2 := (r1[2] - r2[0]) > tolerance // e1 > w2
+	check3 := (r1[1] - r2[3]) < tolerance // s1 < n2
+	check4 := (r1[3] - r2[1]) > tolerance // n1 > s2
+	check5 := (r1[4] - r2[5]) < tolerance // minZ1 < maxZ2
+	check6 := (r1[5] - r2[4]) > tolerance // maxZ1 > minZ2
+
+	return check1 && check2 && check3 && check4 && check5 && check6
+}

@@ -101,6 +101,7 @@ func GetTileLimitByBbox(srid int, z int, bbox gm.BBox) (int, int, int, int) {
 }
 
 // GetTileLimit
+// 这个算法当z=4326时，比postgis中的z小1，如果z=8，那么postgis就应该用9
 func GetTileLimit(srid int, z int) (int, int, int, int) {
 	startX := 0
 	startY := 0

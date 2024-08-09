@@ -234,7 +234,7 @@ func (m *transformMerge) appendTexture(index uint32, newIndex *uint32) error {
 				MimeType: image.MimeType,
 				URI:      image.URI,
 			}
-			// 有URI就没有BufferView
+			// 有 URI 就没有BufferView
 			if image.BufferView != nil {
 				bfv := doc.BufferViews[*image.BufferView]
 				data, err := modeler.ReadBufferView(doc, bfv)

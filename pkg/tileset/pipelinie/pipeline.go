@@ -57,7 +57,7 @@ func (m *Pipeline) Rebuild(dir string) error {
 			// 这里应该改用完全包含，当tile的范围被bv完全包含（包括相等）的时候，直接将tile合并，这里应该根据层级范围添加容错
 			// 否则遍历tile子级，寻找被完全包含的块再包含
 			// 注意，这里会有切片横跨 BoundingVolume，根据当前范围的容错，如果可以接受，直接添加到第一次遍历到的合并切片，之后不会再遍历到
-			if tileset.IsBoundingBoxesOverlap(&bv, &tile.BoundingVolume) {
+			if IsBoundingBoxesOverlap(&bv, &tile.BoundingVolume, 0) {
 
 			}
 

@@ -46,7 +46,7 @@ func (m *BoundingVolume) GetRegion() *[6]float64 {
 	// 这里默认坐标轴对称
 	if m.Box != nil {
 		centerX, centerY, centerZ := m.Box[0], m.Box[1], m.Box[2]
-		halfW, halfH, halfZ := m.Box[4], m.Box[8], m.Box[11]
+		halfW, halfH, halfZ := m.Box[3], m.Box[7], m.Box[11]
 
 		return &[6]float64{
 			centerX - halfW*2,
@@ -60,17 +60,36 @@ func (m *BoundingVolume) GetRegion() *[6]float64 {
 	return nil
 }
 
-// 这里判断两个aabb是否重叠
-func IsBoundingBoxesOverlap(box1, box2 *BoundingVolume) bool {
-	r1 := box1.GetRegion()
-	r2 := box2.GetRegion()
-
-	return r1[0] > r2[2] || r1[2] < r2[0] || r1[1] > r2[3] || r1[3] < r2[1] || r1[4] > r2[5] || r1[5] < r2[4]
+// GetRegion
+func (m *BoundingVolume) GetBox() *[12]float64 {
+	if m.Box != nil {
+		return m.Box
+	}
+	// 这里默认坐标轴对称
+	if m.Region != nil {
+		west, south, east, north, minZ, maxZ := m.Region[0], m.Region[1], m.Region[2], m.Region[3], m.Region[4], m.Region[5]
+		return &[12]float64{
+			(east + west) / 2,
+			(south + north) / 2,
+			(minZ + maxZ) / 2,
+			(east - west) / 2,
+			0,
+			0,
+			0,
+			(north - south) / 2,
+			0,
+			0,
+			0,
+			(maxZ - minZ) / 2,
+		}
+	}
+	return nil
 }
 
 // QuadtreeBoundingVolume
 // 获取当前BoundingVolumn的四叉树子级
 // 这里中心点高度不变
+// https://github.com/vladimirpajic/cesium_3d_tiles_generator/blob/master/src/quadtree.rs
 func (m *BoundingVolume) QuadtreeBoundingVolumeBox() [4]BoundingVolume {
 	centerX, centerY, centerZ := m.Box[0], m.Box[1], m.Box[2]
 	halfW, halfH, halfZ := m.Box[4], m.Box[8], m.Box[11]
