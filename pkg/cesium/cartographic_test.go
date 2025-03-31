@@ -29,7 +29,7 @@ func TestCartogrphicFromCartesian(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := cartographicFromCartesian3(tt.input)
+			got, err := CartographicFromCartesian3(tt.input)
 			if tt.wantErr {
 				if assert.Error(t, err) {
 					assert.Equal(t, err, tt.expectedError, "Expected an error")

@@ -3,13 +3,13 @@ package pipelinie
 import (
 	"math"
 
-	"github.com/mocheer/xena/pkg/tileset"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 )
 
 // GetGeometricError 计算几何误差
 // 只需要计算 对角线/系数 ，这个系数约为16,即可，因为切片范围越大zoom越小精度越低，切片范围越小精度越高
 // 对角线可能不太合理，因为有空白切片
-func GetGeometricError(bbox tileset.BoundingVolume) float64 {
+func GetGeometricError(bbox tile.BoundingVolume) float64 {
 	// 计算bbox的对角线长度
 	//
 
@@ -81,7 +81,7 @@ func CalcEnuToEcefMatrix(lnt, lat, heightMin float64) [16]float64 {
 
 // IsBoundingBoxesOverlap
 // 这里判断两个aabb是否重叠
-func IsBoundingBoxesOverlap(box1, box2 *tileset.BoundingVolume, tolerance float64) bool {
+func IsBoundingBoxesOverlap(box1, box2 *tile.BoundingVolume, tolerance float64) bool {
 	r1 := box1.GetRegion()
 	r2 := box2.GetRegion()
 	check1 := (r1[0] - r2[2]) < tolerance // w1 < e2

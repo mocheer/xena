@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/mocheer/pluto/pkg/ds/ds_gltf"
-	"github.com/mocheer/xena/pkg/tileset"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 	"github.com/mocheer/xena/pkg/tileset/transform"
 	"github.com/qmuntal/gltf"
 )
@@ -44,9 +44,9 @@ func (m *Pipeline) SetTransformFromENU(lon float64, lat float64, alt float64) {
 // 从上到下重建顶层
 func (m *Pipeline) Rebuild(dir string) error {
 	tiles := m.Tileset.GetFirstTiles() //
-	var build func(z int, num int, bv tileset.BoundingVolume, tiles []*TileWrapper)
+	var build func(z int, num int, bv tile.BoundingVolume, tiles []*TileWrapper)
 	//
-	build = func(z int, num int, bv tileset.BoundingVolume, tiles []*TileWrapper) {
+	build = func(z int, num int, bv tile.BoundingVolume, tiles []*TileWrapper) {
 		if z > 22 {
 			return
 		}

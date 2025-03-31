@@ -7,12 +7,12 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/ts/ctp"
-	"github.com/mocheer/xena/pkg/tileset"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 	"github.com/qmuntal/gltf"
 )
 
 type TileWrapper struct {
-	*tileset.Tile
+	*tile.Tile
 	// 用于辅助加载和保存
 	Doc            *gltf.Document
 	OwnerTileset   *TilesetWrapper
@@ -50,7 +50,7 @@ func (m *TileWrapper) LoadTileset() (*TilesetWrapper, error) {
 		if err != nil {
 			return nil, err
 		}
-		t := &TilesetWrapper{Tileset: tileset.FromBytes(data), OwnerTile: m}
+		t := &TilesetWrapper{Tileset: tile.FromBytes(data), OwnerTile: m}
 		t.URL = m.GetContentURL()
 		t.RelativePath = filepath.Join(m.OwnerTileset.RelativePath, path.Dir(m.Content.GetURL()))
 		m.ContentTileset = t

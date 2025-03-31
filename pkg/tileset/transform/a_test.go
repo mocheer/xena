@@ -18,7 +18,7 @@ func TestXxx(t *testing.T) {
 	// doc.Meshes = []*gltf.Mesh{}
 	// doc.Materials = []*gltf.Material{}
 
-	ds_gltf.Save("./testdata/merge.gltf", doc, false)
+	ds_gltf.Save("./testdata/merge2.gltf", doc, false)
 	//
 	// ds_gltf.Save("./testdata/a.gltf", doc, false)
 	// ds_gltf.Save("./testdata/b.gltf", doc2, false)

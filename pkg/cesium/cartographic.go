@@ -19,13 +19,15 @@ var (
 	Wgs84CenterToleranceSquared = Epsilon1
 )
 
+// 这里是弧度制
 type Cartographic struct {
 	Longitude float64
 	Latitude  float64
 	Height    float64
 }
 
-func cartographicFromCartesian3(cs *Cartesian3) (*Cartographic, error) {
+// CartographicFromCartesian3
+func CartographicFromCartesian3(cs *Cartesian3) (*Cartographic, error) {
 	oneOverRadii := Wgs84OneOverRadii
 	oneOverRadiiSquared := Wgs84OneOverRadiiSquared
 	centerToleranceSquared := Wgs84CenterToleranceSquared

@@ -4,33 +4,31 @@ import (
 	"github.com/mocheer/xena/pkg/alg"
 )
 
-//BezierCurve interface
-type BezierCurve interface {
-	GetPoints(step float64) []Point
-	GetPoint(t float64) Point
-}
-
-// bezierCurve implements the BezierCurve interface.
-type bezierCurve struct {
+// 贝塞尔曲线
+type BezierCurve struct {
 	data []Point
 }
 
-//NewBezierCurve creates a new bezier curve.
-func NewBezierCurve(data []Point) BezierCurve {
-	return &bezierCurve{data}
+// NewBezierCurve creates a new bezier curve.
+func NewBezierCurve(data []Point) *BezierCurve {
+	return &BezierCurve{data}
 }
 
-//GetPoints step [0,1]
-func (m *bezierCurve) GetPoints(step float64) []Point {
-	var points []Point
+// GetPoints
+//
+//	step [0,1]
+func (m *BezierCurve) GetPoints(step float64) []Point {
+	points := []Point{} // todo 改成make
 	for t := 0.0; t <= 1; t += step {
 		points = append(points, m.GetPoint(t))
 	}
 	return points
 }
 
-//GetPoint t [0,1]
-func (m *bezierCurve) GetPoint(t float64) Point {
+// GetPoint
+//
+//	t [0,1]
+func (m *BezierCurve) GetPoint(t float64) Point {
 	data := m.data
 	var x float64
 	var y float64

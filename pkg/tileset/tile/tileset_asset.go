@@ -1,4 +1,4 @@
-package tileset
+package tile
 
 type Asset struct {
 	Version        string `json:"version"`                  //表示tileset使用的3D Tiles规范的版本。

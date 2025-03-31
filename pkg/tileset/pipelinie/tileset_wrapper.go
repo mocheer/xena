@@ -3,11 +3,11 @@ package pipelinie
 import (
 	"path"
 
-	"github.com/mocheer/xena/pkg/tileset"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 )
 
 type TilesetWrapper struct {
-	*tileset.Tileset
+	*tile.Tileset
 	// 不在tileset规范中，这里用作content的相对路径
 	// 用于辅助加载和保存
 	OwnerTile    *TileWrapper

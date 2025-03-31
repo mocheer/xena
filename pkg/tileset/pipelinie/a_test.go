@@ -3,9 +3,9 @@ package pipelinie_test
 import (
 	"testing"
 
-	"github.com/mocheer/xena/pkg/tileset"
 	"github.com/mocheer/xena/pkg/tileset/pipelinie"
 	"github.com/mocheer/xena/pkg/tileset/pipelinie/option"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 )
 
 func TestXxx(t *testing.T) {
@@ -33,7 +33,7 @@ func Test4(t *testing.T) {
 
 func Test5(t *testing.T) {
 	// 0.json
-	b1 := &tileset.BoundingVolume{
+	b1 := &tile.BoundingVolume{
 		Box: &[12]float64{
 			5.686390032293275,
 			0.026497788494452834,
@@ -50,7 +50,7 @@ func Test5(t *testing.T) {
 		},
 	}
 	// 0-1202.json
-	b2 := &tileset.BoundingVolume{
+	b2 := &tile.BoundingVolume{
 		Box: &[12]float64{
 			-2356.47313700011,
 			-3689.311824395787,
@@ -68,7 +68,7 @@ func Test5(t *testing.T) {
 	}
 
 	// 0-1313-2020.json
-	b3 := &tileset.BoundingVolume{
+	b3 := &tile.BoundingVolume{
 		Box: &[12]float64{
 			920.3539557913316,
 			3148.1310253855772,

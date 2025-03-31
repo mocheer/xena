@@ -9,3 +9,17 @@ func (p *PointZ) SetXYZ(xyz [3]float64) (err error) {
 	p[2] = xyz[2]
 	return
 }
+
+func (p *PointZ) Point() Point {
+	return Point{p[0], p[1]}
+}
+
+func (p *PointZ) LonLat() LonLat {
+	return LonLat(p.Point())
+}
+
+func (p *PointZ) Clone() PointZ {
+	return PointZ{
+		p[0], p[1], p[2],
+	}
+}

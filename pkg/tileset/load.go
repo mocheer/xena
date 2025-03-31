@@ -8,6 +8,7 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/ts/ctp"
+	"github.com/mocheer/xena/pkg/tileset/tile"
 )
 
 // Load 加载所有数据并保存到本地
@@ -18,7 +19,7 @@ func Load(urlstr string, filename string) error {
 
 	data, err := ctp.Get(urlstr)
 	if err == nil {
-		t := FromBytes(data)
+		t := tile.FromBytes(data)
 		if !ds.IsExist(filename) {
 
 			err = ds.Save(filename, data)
@@ -33,7 +34,7 @@ func Load(urlstr string, filename string) error {
 }
 
 // loadTile 下载tile以及tile的所有子级
-func loadTile(m *Tile, baseURL, dirName string) error {
+func loadTile(m *tile.Tile, baseURL, dirName string) error {
 	if m.Content != nil {
 		err := loadContent(m, baseURL, dirName)
 		if err != nil {
@@ -66,7 +67,7 @@ func loadTile(m *Tile, baseURL, dirName string) error {
 }
 
 // loadContent 加载
-func loadContent(m *Tile, baseURL string, dir string) error {
+func loadContent(m *tile.Tile, baseURL string, dir string) error {
 
 	name, err := url.QueryUnescape(m.Content.GetURL())
 	if err != nil {

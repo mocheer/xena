@@ -1,4 +1,4 @@
-package tileset
+package tile
 
 type Tile struct {
 	Content             *Content        `json:"content,omitempty"`

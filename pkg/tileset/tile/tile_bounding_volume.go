@@ -1,4 +1,4 @@
-package tileset
+package tile
 
 // 切片的边界体积
 // 一般只用 region、box、sphere中的一种来表达这个边界范围
