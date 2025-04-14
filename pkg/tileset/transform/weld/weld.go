@@ -1,44 +1,37 @@
 package weld
 
 import (
-	"math"
-
 	. "github.com/mocheer/xena/pkg/tileset/transform/graph"
 	"github.com/qmuntal/gltf"
 )
 
 type WeldOptions struct {
-	Overwrite bool
+	Tolerance float64
 }
 
 func Weld(options WeldOptions) func(graph *Graph) error {
 	return func(graph *Graph) error {
+		graph.EachUsedNodes(func(node *GraphNode) {
+			for _, p := range node.GetMesh().GetPrimitives() {
+				weldPrimitive(p, options)
+			}
+		})
 		return nil
 	}
 }
 
-
-
-var WELD_DEFAULTS = WeldOptions{
-	Overwrite: false,
-}
-
-func weldPrimitive(prim *GraphPrimitive, options WeldOptions) {
-	// 如果有索引同时不想要重写
-	if prim.Indices != nil && !options.Overwrite {
-		return
-	}
+func weldPrimitive(p *GraphPrimitive, options WeldOptions) {
 	// 如果是点，那就不需要weld
-	if prim.Mode == gltf.PrimitivePoints {
+	if p.Mode == gltf.PrimitivePoints {
 		return
 	}
-	position, err := prim.ReadPostion()
+	position, err := p.ReadPostion()
 	if err != nil {
 		return
 	}
 	srcVertexCount := len(position)
 	// 不一定有 indices ,没有的时候
-	srcIndices, err := prim.ReadIndices()
+	srcIndices, err := p.ReadIndices()
 	srcIndicesCount := len(srcIndices)
 	if err != nil {
 		srcIndicesCount = srcVertexCount
@@ -55,23 +48,24 @@ func weldPrimitive(prim *GraphPrimitive, options WeldOptions) {
 	}
 
 	dstVertexCount := uint32(0)
-
-	for i := 0; i < srcIndicesCount; i++ {
+	for i := range srcIndicesCount {
+		// 原始索引
 		var srcIndex uint32
 		if srcIndices != nil {
 			srcIndex = srcIndices[i]
 		} else {
 			srcIndex = uint32(i)
 		}
+		// 已经写入了，就不要再重复
 		if writeMap[srcIndex] != EMPTY_U32 {
 			continue
 		}
-
-		hashIndex := hashLookup(table, tableSize, prim, srcIndex, EMPTY_U32)
+		// 目标索引
+		hashIndex, _ := hashLookup(table, tableSize, NewVertexStream(p), srcIndex, EMPTY_U32)
 		dstIndex := table[hashIndex]
 
 		if dstIndex == EMPTY_U32 {
-			table[hashIndex] = srcIndex
+			table[hashIndex] = srcIndex //指向原始索引，顶点在Tolerance误差下看似成同一个点，但这个点指向最开始的第一个点
 			writeMap[srcIndex] = dstVertexCount
 			dstVertexCount++
 		} else {
@@ -79,5 +73,5 @@ func weldPrimitive(prim *GraphPrimitive, options WeldOptions) {
 		}
 	}
 
-	compactPrimitive(prim, writeMap, dstVertexCount)
+	compactPrimitive(p, writeMap, dstVertexCount)
 }

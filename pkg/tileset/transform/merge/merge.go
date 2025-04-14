@@ -1,4 +1,4 @@
-package transform
+package merge
 
 import (
 	"github.com/qmuntal/gltf"

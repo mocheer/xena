@@ -25,6 +25,7 @@ type VertexStreamAttribute struct {
 }
 
 // NewVertexStream 创建一个新的 VertexStream，初始化所有顶点属性。
+// 将顶点的所有属性（位置、法线、纹理坐标等）组合起来，计算一个唯一的哈希值。
 func NewVertexStream(prim *GraphPrimitive) *VertexStream {
 	vs := &VertexStream{}
 	totalStride := 0
@@ -63,13 +64,13 @@ func (vs *VertexStream) initAttribute(accessor *GraphAccessor) int {
 }
 
 // Hash 计算指定索引顶点的哈希值。
-func (vs *VertexStream) Hash(index int) uint32 {
+func (vs *VertexStream) Hash(index uint32) uint32 {
 	offset := 0
 	// 将顶点数据复制到对齐的临时缓冲区
 	for _, attr := range vs.attributes {
-		for i := 0; i < attr.paddedByteStride; i++ {
+		for i := range attr.paddedByteStride {
 			if i < attr.byteStride {
-				vs.u8[offset+i] = attr.u8[index*attr.byteStride+i]
+				vs.u8[offset+i] = attr.u8[int(index)*attr.byteStride+i]
 			} else {
 				vs.u8[offset+i] = 0 // 填充0
 			}
@@ -85,7 +86,7 @@ func (vs *VertexStream) Equal(a, b int) bool {
 	for _, attr := range vs.attributes {
 		aOffset := a * attr.byteStride
 		bOffset := b * attr.byteStride
-		for j := 0; j < attr.byteStride; j++ {
+		for j := range attr.byteStride {
 			if attr.u8[aOffset+j] != attr.u8[bOffset+j] {
 				return false
 			}
@@ -115,14 +116,14 @@ func murmurHash2(h uint32, key []uint32) uint32 {
 }
 
 // hashLookup 在哈希表中查找或插入顶点索引。
-func hashLookup(table []uint32, buckets int, stream *VertexStream, key int, empty uint32) (int, error) {
+func hashLookup(table []uint32, buckets int, stream *VertexStream, key uint32, empty uint32) (int, error) {
 	hashmod := uint32(buckets - 1)
 	hashval := stream.Hash(key)
 	bucket := hashval & hashmod
 
 	for probe := 0; probe <= buckets; probe++ {
 		item := table[bucket]
-		if item == empty || stream.Equal(int(item), key) {
+		if item == empty || stream.Equal(int(item), int(key)) {
 			return int(bucket), nil
 		}
 		// 线性探测解决哈希冲突

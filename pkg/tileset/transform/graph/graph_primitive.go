@@ -6,7 +6,6 @@ import (
 	"maps"
 
 	"github.com/qmuntal/gltf"
-	"github.com/qmuntal/gltf/modeler"
 )
 
 // GraphPrimitive
@@ -17,6 +16,8 @@ import (
 type GraphPrimitive struct {
 	*gltf.Primitive
 	Graph *Graph
+	// 缓存，占用内存可能无法及时释放
+	position [][3]float32
 }
 
 /**
@@ -46,25 +47,36 @@ func (m GraphPrimitive) GetAttribute(semantic string) *GraphAccessor {
 }
 
 func (m GraphPrimitive) GetMaterial() *GraphMaterial {
-	return m.Graph.Materials[*m.Material]
+	if m.Material != nil {
+		return m.Graph.Materials[*m.Material]
+	}
+	return nil
+}
+
+// GetIndices
+func (m GraphPrimitive) GetIndices() *GraphAccessor {
+	if m.Indices != nil {
+		return m.Graph.Accessors[*m.Indices]
+	}
+	return nil
 }
 
 // ReadIndices 读取顶点索引数据
 // 顶点索引数据可为空，为空时，直接按照顶点数据绘制
 func (m GraphPrimitive) ReadIndices() ([]uint32, error) {
-	doc := m.Graph.Doc
-	indices, err := modeler.ReadIndices(doc, doc.Accessors[*m.Indices], nil)
-	return indices, err
+	acc := m.GetIndices()
+	if acc != nil {
+		return acc.ReadAsIndices()
+	}
+	return nil, errors.New("not found")
 }
 
 // WriteIndices 这里写入，但可能需要销毁原来的数据
 func (m GraphPrimitive) WriteIndices(indices []uint32) {
-	doc := m.Graph.Doc
-	index := gltf.Index(modeler.WriteIndices(doc, indices))
-	m.Indices = index
+	*m.Indices = m.Graph.WriteIndices(indices)
 }
 
-// PruneIndices
+// DiscardIndices
 // 这里只是去掉索引数据，还需要保证这个索引顺序其他Primtive都没有使用，才能修改buffer和bufferView等
 func (m GraphPrimitive) DiscardIndices() {
 	m.Indices = nil
@@ -72,9 +84,17 @@ func (m GraphPrimitive) DiscardIndices() {
 
 // ReadPostion 读取顶点数据，一般需要配合索引数据来构建模型
 func (m GraphPrimitive) ReadPostion() ([][3]float32, error) {
+	if m.position != nil {
+		return m.position, nil
+	}
 	val := m.GetAttribute(gltf.POSITION)
 	if val != nil {
-		return val.ReadAsPosition()
+		position, err := val.ReadAsPosition()
+		if err != nil {
+			return nil, err
+		}
+		m.position = position
+		return m.position, err
 	}
 	return nil, errors.New("not found")
 }
@@ -104,14 +124,43 @@ func (m GraphPrimitive) ReadTEXCOORD_1() ([][2]float32, error) {
 	return nil, errors.New("not found")
 }
 func (m GraphPrimitive) WritePostion(position [][3]float32) {
-	m.Attributes[gltf.POSITION] = modeler.WritePosition(m.Graph.Doc, position)
+	m.Attributes[gltf.POSITION] = m.Graph.WritePostion(position)
+	m.position = nil
 }
 
 func (m GraphPrimitive) WriteTEXCOORD_0(textureCoord [][2]float32) {
-	doc := m.Graph.Doc
-	m.Attributes[gltf.TEXCOORD_0] = modeler.WriteTextureCoord(doc, textureCoord)
+	m.Attributes[gltf.TEXCOORD_0] = m.Graph.WriteTextureCoord(textureCoord)
 }
 
 func (m GraphPrimitive) WriteTEXCOORD_1(textureCoord [][2]float32) {
-	m.Attributes[gltf.TEXCOORD_1] = modeler.WriteTextureCoord(m.Graph.Doc, textureCoord)
+	m.Attributes[gltf.TEXCOORD_1] = m.Graph.WriteTextureCoord(textureCoord)
+}
+
+// https://github.com/donmccurdy/glTF-Transform/blob/main/packages/functions/src/get-vertex-count.ts#L180
+
+// GetVertexCount
+// 获取顶点数量
+// 类似 VertexCountMethod.UPLOAD,VertexCountMethod.UPLOAD_NAIVE
+func (m GraphPrimitive) GetVertexCount() uint32 {
+	val := m.GetAttribute(gltf.POSITION)
+	if val != nil {
+		return val.Count
+	}
+	return 0
+}
+
+// GetVertexCountWithRender
+// 获取实际渲染的顶点数量
+func (m GraphPrimitive) GetVertexCountWithRender() uint32 {
+	val := m.GetIndices()
+	if val != nil {
+		return val.Count
+	}
+	return m.GetVertexCount()
+}
+
+// GetVertexCountWithRender
+// 获取没有用到的顶点数量
+func (m GraphPrimitive) GetVertexCountWithUnused() uint32 {
+	return m.GetVertexCount() - m.GetVertexCountWithRender()
 }

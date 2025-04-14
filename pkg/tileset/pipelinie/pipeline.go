@@ -7,7 +7,7 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ds/ds_gltf"
 	"github.com/mocheer/xena/pkg/tileset/tile"
-	"github.com/mocheer/xena/pkg/tileset/transform"
+	"github.com/mocheer/xena/pkg/tileset/transform/merge"
 	"github.com/qmuntal/gltf"
 )
 
@@ -75,7 +75,7 @@ func (m *Pipeline) Rebuild(dir string) error {
 				}
 			}
 			childrenTiles = append(childrenTiles, tile)
-			transform.MergeTo(&doc, tile.Doc)
+			merge.MergeTo(&doc, tile.Doc)
 		}
 		filename := fmt.Sprintf("L%d_%d.glb", z, num)
 		// 这里需要加一层简化、网格化、draco、ktx2

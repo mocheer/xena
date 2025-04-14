@@ -1,4 +1,6 @@
 # transform
 
 ## 参考
-- https://gltf-transform.dev/modules/functions/functions/mergeDocuments
+- https://github.com/zeux/meshoptimizer
+- https://github.com/CesiumGS/gltf-pipeline
+- https://gltf-transform.dev/

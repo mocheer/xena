@@ -21,10 +21,16 @@ func (m *GraphAccessor) GetBufferView() *GraphBufferView {
 	return m.Graph.BufferViews[*m.Accessor.BufferView]
 }
 
-// Read
+// ReadBufferView
 // 这里只读取BufferView，可能不准确，还有一部分数据放在Sparse，这部分数据后面要合并
 func (m *GraphAccessor) ReadBufferView() ([]byte, error) {
 	return modeler.ReadBufferView(m.Graph.Doc, m.GetBufferView().BufferView)
+}
+
+// ReadAsIndices
+func (m *GraphAccessor) ReadAsIndices() ([]uint32, error) {
+
+	return modeler.ReadIndices(m.Graph.Doc, m.Accessor, nil)
 }
 
 func (m *GraphAccessor) ReadAsPosition() ([][3]float32, error) {

@@ -2,6 +2,7 @@ package graph
 
 import (
 	"github.com/qmuntal/gltf"
+	"github.com/qmuntal/gltf/modeler"
 )
 
 type Graph struct {
@@ -190,6 +191,19 @@ func (m *Graph) AppendBufferview(bufferview *gltf.BufferView) {
 	})
 }
 
+// AppendBufferview
+func (m *Graph) AddMesh(mesh *gltf.Mesh) {
+	doc := m.Doc
+	meshIndex := len(doc.Meshes)
+	nodeIndex := len(doc.Nodes)
+	doc.Meshes = append(doc.Meshes, mesh)
+	m.AppendMesh(mesh)
+	node := &gltf.Node{Mesh: gltf.Index(uint32(meshIndex))}
+	doc.Nodes = append(doc.Nodes, node)
+	m.AppendNode(node)
+	m.Scene.Nodes = append(m.Scene.Nodes, uint32(nodeIndex))
+}
+
 // DiscardScenes
 // 直接丢弃没有用到的场景
 func (m *Graph) DiscardScenes() {
@@ -211,6 +225,18 @@ func (m *Graph) FindUsedNodes(fn func(node *GraphNode) bool) bool {
 		}
 	}
 	return true
+}
+
+func (m *Graph) WriteIndices(indices []uint32) uint32 {
+	return modeler.WriteIndices(m.Doc, indices)
+}
+
+func (m *Graph) WritePostion(position [][3]float32) uint32 {
+	return modeler.WritePosition(m.Doc, position)
+}
+
+func (m *Graph) WriteTextureCoord(textureCoord [][2]float32) uint32 {
+	return modeler.WriteTextureCoord(m.Doc, textureCoord)
 }
 
 // EachVisiableNodes
