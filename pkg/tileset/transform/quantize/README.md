@@ -1,0 +1,15 @@
+# quantize
+
+## KHR_mesh_quantization
+
+Quantization也就是向量化，是将用浮点数表示的数据使用整形数据表示，方便压缩存储，但是会丢失精度。
+gltf的网格数据都是使用浮点数储存，一个单精度浮点数占32位4byte，一个顶点3个数12byte，纹理坐标8byte，法线，12byte，正切空间16byte，一个顶点附带的信息数量就需要48byte。
+使用通过该扩展来保存顶点坐标6byte，纹理坐标4byte，法线坐标4byte, 正切空间4byte（为了不破坏标准都是4的倍数byte），一共20byte。
+所以经过向量化之后的网格能有大概58.4%的压缩。
+
+按倾斜摄影模型计算，只需要顶点坐标、纹理坐标，一个顶点的数据量是20byte，优化后是12byte，大概是40%的压缩率
+
+> 存储的位数可以自定义
+
+## 参考
+- https://gltf-transform.dev/modules/functions/functions/quantize

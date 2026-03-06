@@ -1,0 +1,24 @@
+# Build and Release Folders
+*.exe
+# air tmp
+tmp
+# vendor
+vendor
+public
+config
+
+# node
+node_modules/
+
+# 
+data
+log
+
+gfs/raster
+testdata/
+
+# 
+go.work
+go.work.sum
+.temp/**
+

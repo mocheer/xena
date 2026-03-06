@@ -1,0 +1,33 @@
+package topojson
+
+import (
+	geojson "github.com/paulmach/go.geojson"
+	topoj "github.com/rubenv/topojson"
+)
+
+func NewTopology(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
+	fc, err := geojson.UnmarshalFeatureCollection(data)
+	if err != nil {
+		panic(err)
+	}
+	return topoj.NewTopology(fc, opts)
+}
+
+func NewTopologyByFeature(data []byte, opts *topoj.TopologyOptions) *topoj.Topology {
+	f, err := geojson.UnmarshalFeature(data)
+	if err != nil {
+		panic(err)
+	}
+	fc := geojson.NewFeatureCollection()
+	fc.AddFeature(f)
+	return topoj.NewTopology(fc, opts)
+}
+
+// UnmarshalTopology
+func UnmarshalTopology(data []byte) *topoj.Topology {
+	result, err := topoj.UnmarshalTopology(data)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
