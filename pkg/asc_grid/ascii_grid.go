@@ -4,14 +4,15 @@ import (
 	_ "embed"
 	"regexp"
 
-	"github.com/mocheer/pluto/pkg/d3/d3_contour"
 	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/mocheer/pluto/pkg/series/d3/d3_contour"
 	"github.com/mocheer/xena/pkg/proj4"
 	"github.com/samber/lo"
 
 	"github.com/mocheer/pluto/pkg/ds/ds_text"
 )
 
+// AsciiGrid
 type AsciiGrid struct {
 	Ncols       int
 	Nrows       int
