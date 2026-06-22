@@ -51,6 +51,7 @@ func TextureMerge(options TextureMergeOptions) func(graph *graph.Graph) error {
 // https://github.com/depp/skelly64/tree/main/lib/rectpack 任天堂的算法
 // https://github.com/lewisgibson/go-binpack MaxRects算法，空间利用率极高，但性能小于skyline
 // https://github.com/pekim/skyline 用于打包2D矩形的天际线算法。 空间利用率只是中等
+// @see ds_ase.FromImages
 func createTextureAtlas(images []image.Image) (image.Image, []extension.KHR_texture_transform_options) {
 	// 计算大图尺寸 (简单堆叠)
 	totalWidth := 0
