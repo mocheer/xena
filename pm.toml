@@ -1,0 +1,16 @@
+Name = "xena"
+Version = "0.0.1"
+Description = "A project"
+Lang = "go"
+Platforms = ["windows-amd64", "linux-amd64"]
+BuildDir = "build"
+Author = "mocheer"
+License = "MIT"
+
+[Cmd]
+  xena = "cmd/xena"
+
+[Docker]
+  xena = "docker.io/github.com/mocheer/xena"
+
+[Scripts]
