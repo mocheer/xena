@@ -34,12 +34,18 @@ func (m BBox) MaxY() float64 {
 	return m[3]
 }
 
-func NewBBox() *BBox {
+func Empty() *BBox {
 	maxNum := math.Inf(+1) //正无穷大的浮点数
 	minNum := math.Inf(-1) //负无穷大的浮点数
 	// 任何有限的浮点数都大于负无穷大。
 	// 任何有限的浮点数都小于正无穷大。
 	return &BBox{maxNum, maxNum, minNum, minNum}
+}
+
+func NewBBox(maxX, maxY, minX, minY float64) *BBox {
+	// 任何有限的浮点数都大于负无穷大。
+	// 任何有限的浮点数都小于正无穷大。
+	return &BBox{maxX, maxY, minX, minY}
 }
 
 // ToPolygon

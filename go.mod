@@ -12,7 +12,7 @@ require (
 	github.com/qedus/osmpbf v1.2.0
 	github.com/qmuntal/gltf v0.26.0
 	github.com/rubenv/topojson v0.0.0-20220429141232-de429a870e0a
-	github.com/samber/lo v1.52.0
+	github.com/samber/lo v1.53.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tidwall/gjson v1.18.0
 	gonum.org/v1/gonum v0.8.2
