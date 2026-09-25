@@ -3,7 +3,7 @@ package geojson
 import (
 	"encoding/json"
 
-	"github.com/mocheer/xena/pkg/gm"
+	gm "github.com/mocheer/xena/pkg/metry"
 	"github.com/tidwall/gjson"
 )
 

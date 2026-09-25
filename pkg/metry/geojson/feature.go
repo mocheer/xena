@@ -1,8 +1,6 @@
 package geojson
 
-import (
-	"github.com/mocheer/xena/pkg/gm"
-)
+import "github.com/mocheer/xena/pkg/gm"
 
 // A Feature corresponds to GeoJSON feature object
 type Feature struct {

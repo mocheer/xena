@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/mocheer/xena/pkg/gm"
-	"github.com/mocheer/xena/pkg/gm_alg"
+	gm_alg "github.com/mocheer/xena/pkg/metry_alg"
 	"github.com/stretchr/testify/assert"
 )
 

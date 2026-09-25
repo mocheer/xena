@@ -3,7 +3,7 @@ package gm_test
 import (
 	"testing"
 
-	"github.com/mocheer/xena/pkg/gm"
+	gm "github.com/mocheer/xena/pkg/metry"
 )
 
 func TestTile(t *testing.T) {

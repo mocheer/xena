@@ -6,9 +6,7 @@ json.Unmarshaler interfaces as well as helper functions such as
 */
 package geojson
 
-import (
-	"github.com/mocheer/xena/pkg/gm"
-)
+import "github.com/mocheer/xena/pkg/gm"
 
 // FeatureCollection
 type FeatureCollection struct {

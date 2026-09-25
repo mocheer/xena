@@ -4,7 +4,7 @@ import (
 	"math"
 
 	"github.com/mocheer/pluto/pkg/fn"
-	"github.com/mocheer/xena/pkg/gm"
+	gm "github.com/mocheer/xena/pkg/metry"
 )
 
 // GetZoom 从经纬度范围和像素大小获取对应的zoom值

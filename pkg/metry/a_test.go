@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/ds/ds_json"
-	"github.com/mocheer/xena/pkg/gm"
+	gm "github.com/mocheer/xena/pkg/metry"
 	"github.com/stretchr/testify/assert"
 )
 
