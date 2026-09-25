@@ -1,6 +1,6 @@
 module github.com/mocheer/xena
 
-go 1.26.0
+go 1.27.0
 
 require (
 	github.com/go-gl/mathgl v1.2.0
